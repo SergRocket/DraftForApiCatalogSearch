@@ -1,11 +1,9 @@
 package Config;
 
-public class ResponseBody {
-    public int responseBody;
-    public int statusCode;
+import lombok.Data;
 
-    public ResponseBody(int responseBody, int statusCode){
-        this.responseBody = responseBody;
-        this.statusCode = statusCode;
-    }
+@Data
+public class ResponseBody extends ParamatersForFeedCreation {
+    public int responseBody;
+    //public int statusCode;
 }

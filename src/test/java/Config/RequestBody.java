@@ -104,8 +104,8 @@ public class RequestBody {
     public Map<String, Object> inputStream;
     public boolean open;
     public boolean readable;
-    public Map<String, Integer, Boolean> uri;//refactor so it can contain boolean, string, int
-    public Map<String, Integer, Boolean> url;//refactor so it can contain  string, int
+   // public Map<String, Integer, Boolean> uri;//refactor so it can contain boolean, string, int
+   // public Map<String, Integer, Boolean> url;//refactor so it can contain  string, int
 
     public String feedClobReferenceId;
     public String feedComponentName;

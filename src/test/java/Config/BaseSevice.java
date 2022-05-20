@@ -1,11 +1,20 @@
 package Config;
 
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.requestSpecification;
 
 public class BaseSevice extends ReportInitialization{
 
@@ -14,31 +23,35 @@ public class BaseSevice extends ReportInitialization{
     public String testName;
     public org.slf4j.Logger logger;
 
-    public Map<String, List<String>> productFeedRequestConfigInsert(String feedName, boolean ftpFeed, boolean runNightly,
+    public void productFeedRequestConfigInsert(String feedName, boolean ftpFeed, boolean runNightly,
                                                         boolean saveFeed, int threshold, int responseBody, int statusCode){
     RequestBody requestBodyFeedController = new RequestBody(feedName,ftpFeed, runNightly, saveFeed,threshold);
     Map<String, RequestBody> configInsertMap = new HashMap<>();
     configInsertMap.put("bodyRequest", requestBodyFeedController);
-    ResponseBody responseBodyObj = new ResponseBody(responseBody, statusCode);
-    Map<String, List<String>> resultMap = getResponseData(responseBodyObj);
-        return resultMap;
+    //ResponseBody responseBodyObj = new ResponseBody(responseBody, statusCode);
+    //Map<String, List<String>> resultMap = getResponseData(responseBodyObj);
+
     }
 
-    private Map<String, List<String>> getResponseData(ResponseBody responseObj){
-        RequestSpecBuilder builder = new RequestSpecBuilder();
-        builder.setBaseUri(getBaseUrl(env));
-        builder.setBasePath("/config/insert");
-        builder.addHeader("Content-Type","application/json");
-        builder.addHeader("Accept","application/json");
-        RequestSpecification requestSpecification = builder.build();
 
-        return null;
-    }
 
-    private String getBaseUrl(String env) {
+
+        Map<String,List<String>> checksumMap = new HashMap<>();
+
+
+
+    public static String getBaseUrl(String env) {
         String url = "https://product-feed."+env+".shutterfly.com";
 
         return url;
+    }
+
+    public ResponseBody postConfigFeedController(ParamatersForFeedCreation requestBody){
+        return given().body(requestBody).post().as(ResponseBody.class);
+    }
+
+    public List<Deseralization> getAllFeeds(){
+        return given().spec(requestSpecification).get().jsonPath().getList("feedName", Deseralization.class);
     }
 
 
