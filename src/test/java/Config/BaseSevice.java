@@ -47,7 +47,14 @@ public class BaseSevice extends ReportInitialization{
     }
 
     public ResponseBody postConfigFeedController(ParamatersForFeedCreation requestBody){
-        return given().body(requestBody).post().as(ResponseBody.class);
+        return given().
+                body(requestBody).
+                put("insert").
+                as(ResponseBody.class);
+    }
+
+    protected String getBasePath() {
+        return "/config/";
     }
 
     public List<Deseralization> getAllFeeds(){

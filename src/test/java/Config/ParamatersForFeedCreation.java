@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParamatersForFeedCreation {
-    private String feedname;
-    private Boolean ftpFeed;
-    private Boolean runNightly;
-    private Boolean saveFeed;
-    private Integer threshold;
+    private String feedName;
+    private boolean ftpFeed;
+    private boolean runNightly;
+    private boolean saveFeed;
+    private int threshold;
 }
