@@ -20,7 +20,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -34,8 +36,9 @@ public class ConfigFeedControllerTests  extends BaseSevice {
         RequestSpecBuilder builder = new RequestSpecBuilder().
                 setBaseUri(BaseSevice.getBaseUrl(env)).
                 setBasePath(getBasePath()).
-                addHeader("Content-Type", "application/json").
-                addHeader("Accept", "application/json").log(LogDetail.ALL);
+
+                addHeader("Accept", "application/json")
+                .log(LogDetail.ALL);
         requestSpecification = builder.build();
 
 
@@ -93,14 +96,121 @@ public class ConfigFeedControllerTests  extends BaseSevice {
     }
 
     @Test
-    public void getConfigFeedCreateVendor () {//need to update basepath
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("forceRefresh",true);
-        parameters.put("uploadToFtp",true);
-        parameters.put("uploadToDb",true);
-        parameters.put("vendor", "google");
-        given().params(parameters).spec(requestSpecification).when().get("feed/create").then().statusCode(200);
+    public void getConfigFeedCreateVendor () {//need to update basepath+configureVendor
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("adHocBuild",true);
+        mainParameters.put("feedType","PARTIAL");
+        mainParameters.put("forceRefresh",true);
+        mainParameters.put("sampleFeedSize", "0");
+        HashMap<String, String> parametersSampleProductCodes = new HashMap<>();
+        parametersSampleProductCodes.put("","string");
+        mainParameters.put("sampleProductCodes", parametersSampleProductCodes);
+        HashMap<String, String> parametersSkipSpecificCollection = new HashMap<>();
+        parametersSkipSpecificCollection.put("","string");
+        mainParameters.put("skipSpecificCollection",parametersSkipSpecificCollection);
+        mainParameters.put("startTime", "0");
+        mainParameters.put("sampleFeedSize", "2022-05-24T10:03:57.888Z");
+        mainParameters.put("storeCode", "string");
+        given().
+                params(mainParameters).
+                spec(requestSpecification).when().get("feed/create/{vendor}").then().statusCode(200);
     }
+
+    @Test
+    public void postConfigFeedCreateVendor () {//need to update basepath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("catalog","string");
+        mainParameters.put("feedName","TestQA244");
+        mainParameters.put("feedType","PARTIAL");
+        mainParameters.put("ftp", true);
+        List<String> parametersSampleProductCodes = new ArrayList<>();
+        parametersSampleProductCodes.add("string");
+        mainParameters.put("sampleProductCodes", parametersSampleProductCodes);
+        List<String> parametersSampleProductTypes = new ArrayList<>();
+        parametersSampleProductTypes.add("string");
+        mainParameters.put("sampleProductCodes", parametersSampleProductCodes);
+        mainParameters.put("sampleProductTypes", parametersSampleProductTypes);
+        mainParameters.put("sampleSize", 0);
+        mainParameters.put("saveToDb", true);
+        List<String> parametersSkipSpecificCollection = new ArrayList<>();
+        parametersSkipSpecificCollection.add("string");
+        mainParameters.put("skipSpecificCollection",parametersSkipSpecificCollection);
+        given().spec(requestSpecification).body(mainParameters).when().
+                post("feed/createFeed").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugControllerByAttributeName () {//need to update basepath+requestSpec
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("attributeName", "forceRefresh");
+        given().params(mainParameters).spec(requestSpecification).when().get("attributealias/forceRefresh").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugAttributemappings () {//need to update basepath+resuestSpec
+        given().spec(requestSpecification).when().get("attributemappings").then().statusCode(200);
+    }
+
+    //needToImplementDebugAttributesProductCode{productCode}skuCode{skuCode}
+
+
+    @Test
+    public void postDebugCreateFeed(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("catalog","string");
+        mainParameters.put("feedName","TestQA944");
+        mainParameters.put("feedType","PARTIAL");
+        mainParameters.put("ftp", true);
+        List<String> parametersSampleProductCodes = new ArrayList<>();
+        parametersSampleProductCodes.add("string");
+        mainParameters.put("sampleProductCodes", parametersSampleProductCodes);
+        List<String> parametersSampleProductTypes = new ArrayList<>();
+        parametersSampleProductTypes.add("string");
+        mainParameters.put("sampleProductCodes", parametersSampleProductCodes);
+        mainParameters.put("sampleProductTypes", parametersSampleProductTypes);
+        mainParameters.put("sampleSize", 0);
+        mainParameters.put("saveToDb", true);
+        List<String> parametersSkipSpecificCollection = new ArrayList<>();
+        parametersSkipSpecificCollection.add("string");
+        mainParameters.put("skipSpecificCollection",parametersSkipSpecificCollection);
+        given().spec(requestSpecification).body(mainParameters).when().
+                post("feed/createFeed").then().statusCode(200);
+    }
+
+
+    @Test
+    public void getDebugFileHystoryLastCompleteFeedNameStoreCode () {//need to update basepath+requestSpec
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("feedName", "QATest7");
+        mainParameters.put("storeCode", "string");
+        given().params(mainParameters).spec(requestSpecification).when().get("fileHistory/lastComplete/QATest7/string").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugGoogleAttributesProductCode () {//need to update basepath+requestSpec+found valid product code
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode", "???");
+        given().params(mainParameters).spec(requestSpecification).when().get("googleattributes/productCode/{productCode}").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugGoogleAttributesProductCodeAndSkuCode () {//need to update basepath+requestSpec+found valid product code+skucode
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode", "???");
+        mainParameters.put("skuCode", "???");
+        given().params(mainParameters).spec(requestSpecification).when().get("googleattributes/productCode/{productCode}/skuCode/{skuCode}").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugMappings () {//need to update basepath+requestSpec+writeCheckFor response body
+        given().spec(requestSpecification).when().get("mappings").then().statusCode(200);
+    }
+
+
+
+
+
+
 
 
 
