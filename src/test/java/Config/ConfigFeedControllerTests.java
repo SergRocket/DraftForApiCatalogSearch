@@ -206,12 +206,70 @@ public class ConfigFeedControllerTests  extends BaseSevice {
         given().spec(requestSpecification).when().get("mappings").then().statusCode(200);
     }
 
+    @Test
+    public void getDebugMobileSkuCode () {//need to update basepath+requestSpec
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("skuCodes", "PALENVELOPE_5X7GOLD");
+        given().params(mainParameters).spec(requestSpecification).when().get("mobile/PALENVELOPE_5X7GOLD/").then().statusCode(200);
+    }
 
+    @Test
+    public void getDebugPimtables () {//need to update basepath+requestSpec
+        given().spec(requestSpecification).when().get("pimtables").then().statusCode(200);
+    }
 
+    @Test
+    public void getDebugPipDataServiceProductCode () {//need to update basepath+requestSpec+find valid product Code
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode", "PALENVELOPE_5X7GOLD");
+        given().params(mainParameters).spec(requestSpecification).when().get("pipDataService/{productCode]/").then().statusCode(200);
+    }
 
+    @Test
+    public void getDebugProductCode () {//need to update basepath+requestSpec+find valid product Code
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode", "PALENVELOPE_5X7GOLD");
+        given().params(mainParameters).spec(requestSpecification).when().get("productCode/{productCode]/").then().statusCode(200);
+    }
 
+    //do we need to cover with tests endpoint restRepoIds?
 
+    @Test
+    public void getDebugSflySkusProductCodeSkuCode () {//need to update basepath+requestSpec+find valid product Code
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode", "PALENVELOPE_5X7GOLD");
+        given().params(mainParameters).spec(requestSpecification).when().get("sflySkus/{productCode}/{skuCode}").then().statusCode(200);
+    }
 
+    @Test
+    public void getDebugShippingPriceSflySkuMinQntUseDefShipping () {//need to update basepath+requestSpec+find valid product Code
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("sflySku","string");
+        mainParameters.put("minQnt", "1");
+        mainParameters.put("useDefaultShipping", true);
+        given().params(mainParameters).spec(requestSpecification).when().get("shippingPrice/{sflySku}/{minQnt}/{useDefaultShipping}").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugTableMapping () {//need to update basepath+requestSpec
+        given().spec(requestSpecification).when().get("tablemapping").then().statusCode(200);
+    }
+
+    @Test
+    public void postDebugTestAvaliability () {//edit request spec and get valid data instead of string in the body
+        HashMap<String, Object> mainBody = new HashMap<String, Object>();
+        mainBody.put("now", "2022-05-24T10:03:57.956Z");
+        mainBody.put("productAvailable", true);
+        mainBody.put("productCode", "string");
+        mainBody.put("skuAvailable", true);
+        mainBody.put("skuCode", "string");
+        given().body(mainBody).when().put("testAvaliability").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugtestFF () {//need to update basepath+requestSpec
+        given().spec(requestSpecification).when().get("testFF").then().statusCode(200);
+    }
 
 
 
