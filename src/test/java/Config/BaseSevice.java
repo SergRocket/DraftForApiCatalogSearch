@@ -54,7 +54,7 @@ public class BaseSevice extends ReportInitialization{
     }
 
     protected String getBasePath() {
-        return "/debug/";
+        return "/status/";
     }
 
     public List<Deseralization> getAllFeeds(){

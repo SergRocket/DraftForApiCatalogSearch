@@ -267,9 +267,156 @@ public class ConfigFeedControllerTests  extends BaseSevice {
     }
 
     @Test
-    public void getDebugtestFF () {//need to update basepath+requestSpec
+    public void getDebugTestFF () {//need to update basepath+requestSpec
         given().spec(requestSpecification).when().get("testFF").then().statusCode(200);
     }
+
+    @Test
+    public void postDebugTestPricingForProductValidation(){ //need to modify request spec + basePath+resovled issue with paramethers
+        HashMap<String, Object> mainBody = new HashMap<>();
+        mainBody.put("imageLink","string");
+        mainBody.put("minimumQtyPrice",0);
+        List<String> bodyParametersOptionPricingSkus = new ArrayList<>();
+        bodyParametersOptionPricingSkus.add("string");
+        mainBody.put("optionPricingSkus", bodyParametersOptionPricingSkus);
+        mainBody.put("optionResourceUID","string");
+        HashMap<String, Object> bodyParametersProductVariationOptions = new HashMap<>();
+        bodyParametersProductVariationOptions.put("optionName","string");
+        bodyParametersProductVariationOptions.put("optionParentDisplayName","string");
+        bodyParametersProductVariationOptions.put("optionValueDisplayName","string");
+        bodyParametersProductVariationOptions.put("resultKeyDisplayName","string");
+        bodyParametersProductVariationOptions.put("resultValueDisplayName","string");
+        mainBody.put("productVariationOptions", bodyParametersProductVariationOptions);
+        mainBody.put("salePrice", 0);
+        mainBody.put("size", "string");
+        mainBody.put("skuCode", "string");
+        mainBody.put("title", "string");
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode","string");
+        mainParameters.put("minQty","string");
+        given().
+                params(mainParameters).
+                spec(requestSpecification).body(mainBody).
+                when().
+                post("testPricingForProductVariation/{productCode}/{minQnt}").then().statusCode(200);
+    }
+
+    @Test
+    public void postDebugTestRetrieveProducts(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainBody = new HashMap<>();
+        mainBody.put("includeThumbnails","string");
+        List<String> bodyParametersProductCodes = new ArrayList<>();
+        bodyParametersProductCodes.add("string");
+        mainBody.put("productCodes", bodyParametersProductCodes);
+        mainBody.put("storeCode","string");
+        mainBody.put("testProductCount", 0);
+        given().spec(requestSpecification).body(mainBody).
+                when().
+                post("testRetrieveProducts").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugThumbnailUrlProductCodeSkuCodeImageSize(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode","string");
+        mainParameters.put("skuCode","string");
+        mainParameters.put("imageSize","string");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("thumbnailUrl/{productCode}/{skuCode}/{imageSize}").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugThumbnailUrlProductCodeImageSize(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode","string");
+        mainParameters.put("imageSize","string");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("thumbnailUrl/{productCode}/{imageSize}").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugV1EpattributeKey(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("key","string");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("v1/epattribute/{key}").then().statusCode(200);
+    }
+
+    @Test
+    public void getDebugV1PimattributeKey(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("key","string");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("v1/pimattribute/{key}").then().statusCode(200);
+    }
+
+    @Test
+    public void getProductFeedDownloaded(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("zipFileName","string");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("feed/download").then().statusCode(200);
+    }
+
+    @Test
+    public void getProductFeedHistoryNumberOfRecords(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("numberOfRecords","10");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("ALL/10").then().statusCode(200);
+    }
+
+    @Test
+    public void getProductFeedHistoryFeedStatusId(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("feedStatusId","string");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("vendor/feedId/{feedStatus}").then().statusCode(200);
+    }
+
+    @Test
+    public void getProductFeedHistoryFeedNoOfDays(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("noOfDays","5");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("vendor/feedIds/5").then().statusCode(200);
+    }
+
+    @Test
+    public void getProductFeedHistoryFeedName(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("feedName","BLOOMREACH");
+        given().params(mainParameters).spec(requestSpecification).
+                when().
+                get("vendor/feedName/BLOOMREACH").then().statusCode(200);
+    }
+
+    @Test
+    public void getStatusV1Vendor(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("vendor","BLOOMREACH");
+        mainParameters.put("days","14");
+        given().params(mainParameters).spec(requestSpecification).when().get("v1/BLOOMREACH").then().statusCode(200);
+    }
+
+    @Test
+    public void getStatusVendor(){ //need to modify request spec + basePath
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("vendor","BLOOMREACH");
+        given().params(mainParameters).spec(requestSpecification).when().get("BLOOMREACH").then().statusCode(200);
+    }
+
+
+
+
 
 
 
