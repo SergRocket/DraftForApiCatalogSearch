@@ -1,13 +1,4 @@
-package Config;
-
-import io.restassured.RestAssured;
-import io.restassured.http.Header;
-import io.restassured.http.Headers;
-import io.restassured.http.Method;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import org.assertj.core.api.Assertions;
-import org.testng.Assert;
+package APITests;
 
 public class GetRequestExample {
   /*  RestAssured.baseURI = "http://kdfldfd";

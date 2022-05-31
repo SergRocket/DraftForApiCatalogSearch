@@ -1,4 +1,4 @@
-package Config;
+package RestApiSetup;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

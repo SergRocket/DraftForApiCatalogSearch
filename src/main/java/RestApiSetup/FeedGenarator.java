@@ -1,4 +1,6 @@
-package Config;
+package RestApiSetup;
+
+import APITests.ResponseBody;
 
 public class FeedGenarator {
     public static ParamatersForFeedCreation updateFeed(){

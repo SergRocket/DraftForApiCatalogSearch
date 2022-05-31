@@ -1,4 +1,4 @@
-package Config;
+package RestApiSetup;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

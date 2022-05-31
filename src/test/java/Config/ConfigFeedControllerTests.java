@@ -1,9 +1,8 @@
 package Config;
 
-import Config.BaseSevice;
-import Config.FeedGenarator;
-import Config.ParamatersForFeedCreation;
-import Config.ResponseBody;
+
+import APITests.ResponseBody;
+import RestApiSetup.*;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import groovy.transform.ASTTest;
 import io.restassured.RestAssured;
@@ -16,6 +15,7 @@ import io.restassured.specification.RequestSpecification;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.json.JSONObject;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -25,24 +25,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.requestSpecification;
+import static io.restassured.RestAssured.*;
 
 
 public class ConfigFeedControllerTests  extends BaseSevice {
-
+    public ConfigFeedController controller = new ConfigFeedController();
+    public CreateFeedController controllerCreate = new CreateFeedController();
     @BeforeTest
     private void beforeClass() {
-        RequestSpecBuilder builder = new RequestSpecBuilder().
-                setBaseUri(BaseSevice.getBaseUrl(env)).
-                setBasePath(getBasePath()).
-
-                addHeader("Accept", "application/json")
-                .log(LogDetail.ALL);
-        requestSpecification = builder.build();
-
-
-
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().expectStatusCode(200).
                 expectContentType(ContentType.JSON).log(LogDetail.ALL);
         RestAssured.responseSpecification = responseSpecBuilder.build();
@@ -50,44 +40,50 @@ public class ConfigFeedControllerTests  extends BaseSevice {
 
    @Test
    public void getConfigAll () {
-    given().spec(requestSpecification).when().get("all").then().statusCode(200);
+       controller.getUsers().stream().sorted().findAny().equals("ADOBE");
    }
 
     @Test
     public void getConfigAllScheduled () {
-        given().spec(requestSpecification).when().get("all/scheduled").then().statusCode(200);
+        controller.getUsersScheduled().stream().sorted().findAny().equals("BLOOMREACH");;
     }
 
     @Test
-    public void getConfigFeedNameByName () {
-        given().spec(requestSpecification).when().get("feedName/{feedName}").then().statusCode(200);
+    public void getConfigByName () {
+        controller.getUsersByName().equals("GOOGLE");
     }
+
 
     @Test
     public void createNewFeeds () {
-        HashMap<String, Object> mainBody = new HashMap<String, Object>();
-        mainBody.put("feedName", "Test22QA");
+        HashMap<String, Object> mainBody = new HashMap<>();
+        mainBody.put("feedName", "Test056355QA");
         mainBody.put("ftpFeed", true);
         mainBody.put("runNightly", true);
         mainBody.put("saveFeed", true);
         mainBody.put("threshold", 0);
-        given().body(mainBody).when().put("insert").then().statusCode(200);
+        Assert.assertFalse(controller.createNewFeed(mainBody).isEmpty());
     }
 
     @Test
     public void updateNewFeeds () {
-        HashMap<String, Object> mainBody = new HashMap<String, Object>();
-        mainBody.put("feedName", "Test22QA");
+        HashMap<String, Object> mainBody = new HashMap<>();
+        mainBody.put("feedName", "Test056355QA");
         mainBody.put("ftpFeed", true);
         mainBody.put("runNightly", true);
         mainBody.put("saveFeed", true);
         mainBody.put("threshold", 0);
-        given().body(mainBody).when().put("update").then().statusCode(200);
+        Assert.assertFalse(controller.updateNewFeed(mainBody).isEmpty());
     }
 
     @Test
-    public void geCreatetFeedForceRefresh () {
-        given().spec(requestSpecification).when().get("feedName/{feedName}").then().statusCode(200);
+    public void geCreatetFeedVendor () {
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("forceRefresh",true);
+        mainParameters.put("uploadToFtp",true);
+        mainParameters.put("uploadToDb",true);
+        mainParameters.put("vendor", "BLOOMREACH");
+        controllerCreate.getProductFeedVendor(mainParameters).contains("COMPLETE");
     }
 
     @Test
@@ -95,26 +91,6 @@ public class ConfigFeedControllerTests  extends BaseSevice {
         given().spec(requestSpecification).when().get("feed/create").then().statusCode(200);
     }
 
-    @Test
-    public void getConfigFeedCreateVendor () {//need to update basepath+configureVendor
-        HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("adHocBuild",true);
-        mainParameters.put("feedType","PARTIAL");
-        mainParameters.put("forceRefresh",true);
-        mainParameters.put("sampleFeedSize", "0");
-        HashMap<String, String> parametersSampleProductCodes = new HashMap<>();
-        parametersSampleProductCodes.put("","string");
-        mainParameters.put("sampleProductCodes", parametersSampleProductCodes);
-        HashMap<String, String> parametersSkipSpecificCollection = new HashMap<>();
-        parametersSkipSpecificCollection.put("","string");
-        mainParameters.put("skipSpecificCollection",parametersSkipSpecificCollection);
-        mainParameters.put("startTime", "0");
-        mainParameters.put("sampleFeedSize", "2022-05-24T10:03:57.888Z");
-        mainParameters.put("storeCode", "string");
-        given().
-                params(mainParameters).
-                spec(requestSpecification).when().get("feed/create/{vendor}").then().statusCode(200);
-    }
 
     @Test
     public void postConfigFeedCreateVendor () {//need to update basepath
@@ -423,8 +399,7 @@ public class ConfigFeedControllerTests  extends BaseSevice {
         @Test
         public void createNewFeed () {
             ParamatersForFeedCreation paramaters = FeedGenarator.updateFeed();
-            ResponseBody createFeedTest = postConfigFeedController(paramaters);
-            AssertionsForClassTypes.assertThat(createFeedTest).isNotNull();
+
 
             AssertionsForClassTypes.assertThat(paramaters).isNotNull().extracting(ParamatersForFeedCreation::getFeedName)
                     .isEqualTo("TestSergQAA");
@@ -432,6 +407,5 @@ public class ConfigFeedControllerTests  extends BaseSevice {
 
 
 
-
-    }
+}
 

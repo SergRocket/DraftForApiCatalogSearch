@@ -1,4 +1,4 @@
-package Config;
+package APITests;
 
 import java.util.Map;
 

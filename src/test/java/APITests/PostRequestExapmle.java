@@ -1,11 +1,10 @@
-package Config;
+package APITests;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
