@@ -19,6 +19,14 @@ public class CreateFeedController extends RestSpec{
                 get(EndPoints.GET_FEED_BY_VENDOR).then().statusCode(200).extract().asString();
     }
 
+    public String postProductFeedCreateFeed(HashMap<String,Object> mainParam){
+        return given().
+                spec(REQUEST_SPECIFICATION).body(mainParam).
+                post(EndPoints.POST_CREATE_FEED).then().statusCode(200).extract().asString();
+    }
+
+
+
 
 
 }

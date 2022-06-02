@@ -17,10 +17,16 @@ public class BaseSevice extends ReportInitialization {
         return url;
     }
 
+    public static String getBaseUrlReg(String env) {
+        String url = "https://api2."+env+".shutterfly.com";
+
+        return url;
+    }
 
 
-    protected String getBasePath() {
-        return "/config/";
+
+    protected String getBasePathReg() {
+        return "/pipdata/v1/";
     }
 
 

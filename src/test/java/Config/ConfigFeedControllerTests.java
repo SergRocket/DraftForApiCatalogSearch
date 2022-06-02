@@ -1,29 +1,18 @@
 package Config;
 
 
-import APITests.ResponseBody;
 import RestApiSetup.*;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import groovy.transform.ASTTest;
 import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
-import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
 
-import org.apache.commons.lang3.builder.ToStringExclude;
-import org.assertj.core.api.AssertionsForClassTypes;
-import org.json.JSONObject;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static io.restassured.RestAssured.*;
 
@@ -31,21 +20,22 @@ import static io.restassured.RestAssured.*;
 public class ConfigFeedControllerTests  extends BaseSevice {
     public ConfigFeedController controller = new ConfigFeedController();
     public CreateFeedController controllerCreate = new CreateFeedController();
+    public DebugController debugController = new DebugController();
     @BeforeTest
     private void beforeClass() {
-        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().expectStatusCode(200).
-                expectContentType(ContentType.JSON).log(LogDetail.ALL);
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().expectStatusCode(200)
+       .log(LogDetail.ALL);
         RestAssured.responseSpecification = responseSpecBuilder.build();
     }
 
    @Test
    public void getConfigAll () {
-       controller.getUsers().stream().sorted().findAny().equals("ADOBE");
+       controller.getUsers().stream().findAny().equals("ADOBE");
    }
 
     @Test
     public void getConfigAllScheduled () {
-        controller.getUsersScheduled().stream().sorted().findAny().equals("BLOOMREACH");;
+        controller.getUsersScheduled().stream().findAny().equals("BLOOMREACH");;
     }
 
     @Test
@@ -55,7 +45,7 @@ public class ConfigFeedControllerTests  extends BaseSevice {
 
 
     @Test
-    public void createNewFeeds () {
+    public void putConfigCreateNewFeeds () {
         HashMap<String, Object> mainBody = new HashMap<>();
         mainBody.put("feedName", "Test056355QA");
         mainBody.put("ftpFeed", true);
@@ -66,7 +56,7 @@ public class ConfigFeedControllerTests  extends BaseSevice {
     }
 
     @Test
-    public void updateNewFeeds () {
+    public void putConfigUpdateNewFeeds () {
         HashMap<String, Object> mainBody = new HashMap<>();
         mainBody.put("feedName", "Test056355QA");
         mainBody.put("ftpFeed", true);
@@ -77,7 +67,7 @@ public class ConfigFeedControllerTests  extends BaseSevice {
     }
 
     @Test
-    public void geCreatetFeedVendor () {
+    public void geCreateFeedVendor () {
         HashMap<String, Object> mainParameters = new HashMap<>();
         mainParameters.put("forceRefresh",true);
         mainParameters.put("uploadToFtp",true);
@@ -87,51 +77,60 @@ public class ConfigFeedControllerTests  extends BaseSevice {
     }
 
     @Test
-    public void getConfigFeedCreate () {//need to update basepath
-        given().spec(requestSpecification).when().get("feed/create").then().statusCode(200);
-    }
-
-
-    @Test
-    public void postConfigFeedCreateVendor () {//need to update basepath
-        HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("catalog","string");
-        mainParameters.put("feedName","TestQA244");
-        mainParameters.put("feedType","PARTIAL");
-        mainParameters.put("ftp", true);
+    public void postConfigFeedCreateVendor () {
+        HashMap<String, Object> mainBody = new HashMap<>();
+        mainBody.put("catalog","string");
+        mainBody.put("feedName","TestQA244");
+        mainBody.put("feedType","PARTIAL");
+        mainBody.put("ftp", true);
         List<String> parametersSampleProductCodes = new ArrayList<>();
         parametersSampleProductCodes.add("string");
-        mainParameters.put("sampleProductCodes", parametersSampleProductCodes);
+        mainBody.put("sampleProductCodes", parametersSampleProductCodes);
         List<String> parametersSampleProductTypes = new ArrayList<>();
         parametersSampleProductTypes.add("string");
-        mainParameters.put("sampleProductCodes", parametersSampleProductCodes);
-        mainParameters.put("sampleProductTypes", parametersSampleProductTypes);
-        mainParameters.put("sampleSize", 0);
-        mainParameters.put("saveToDb", true);
+        mainBody.put("sampleProductCodes", parametersSampleProductCodes);
+        mainBody.put("sampleProductTypes", parametersSampleProductTypes);
+        mainBody.put("sampleSize", 0);
+        mainBody.put("saveToDb", true);
         List<String> parametersSkipSpecificCollection = new ArrayList<>();
         parametersSkipSpecificCollection.add("string");
-        mainParameters.put("skipSpecificCollection",parametersSkipSpecificCollection);
-        given().spec(requestSpecification).body(mainParameters).when().
-                post("feed/createFeed").then().statusCode(200);
+        mainBody.put("skipSpecificCollection",parametersSkipSpecificCollection);
+        controllerCreate.postProductFeedCreateFeed(mainBody).contains("PARTIAL");
     }
 
+
+
+
     @Test
-    public void getDebugControllerByAttributeName () {//need to update basepath+requestSpec
+    public void getDebugControllerByAttributeName () {
         HashMap<String, Object> mainParameters = new HashMap<>();
         mainParameters.put("attributeName", "forceRefresh");
-        given().params(mainParameters).spec(requestSpecification).when().get("attributealias/forceRefresh").then().statusCode(200);
+        debugController.getDebugController(mainParameters).contains("forceRefresh");
     }
 
     @Test
-    public void getDebugAttributemappings () {//need to update basepath+resuestSpec
-        given().spec(requestSpecification).when().get("attributemappings").then().statusCode(200);
+    public void getDebugAttributemappings () {
+        debugController.getDebugAttributeMappings().stream().findAny().equals("ACCENT_COLOR");
     }
 
-    //needToImplementDebugAttributesProductCode{productCode}skuCode{skuCode}
+    @Test
+    public void getDebugAttributeProductCode () {
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode", "2037481");
+        debugController.getDebugByProductCode(mainParameters).contains("Premium card stock");
+    }
+
+    @Test
+    public void getDebugAttributeProductCodeSkuCode () {
+        HashMap<String, Object> mainParameters = new HashMap<>();
+        mainParameters.put("productCode", "2037481");
+        mainParameters.put("skuCode", "2037484");
+        debugController.getDebugByProductCodeSkuCode(mainParameters).contains("Premium card stock");
+    }
 
 
     @Test
-    public void postDebugCreateFeed(){ //need to modify request spec + basePath
+    public void postDebugCreateFeeds(){ //need to modify request spec + basePath
         HashMap<String, Object> mainParameters = new HashMap<>();
         mainParameters.put("catalog","string");
         mainParameters.put("feedName","TestQA944");
@@ -154,58 +153,57 @@ public class ConfigFeedControllerTests  extends BaseSevice {
     }
 
 
-    @Test
-    public void getDebugFileHystoryLastCompleteFeedNameStoreCode () {//need to update basepath+requestSpec
-        HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("feedName", "QATest7");
-        mainParameters.put("storeCode", "string");
-        given().params(mainParameters).spec(requestSpecification).when().get("fileHistory/lastComplete/QATest7/string").then().statusCode(200);
-    }
 
     @Test
-    public void getDebugGoogleAttributesProductCode () {//need to update basepath+requestSpec+found valid product code
+    public void getDebugFileHistoryLastCompleteFeedNameStoreCode () {//issue with content type
+        Assert.assertFalse(debugController.generateFullFeed());
+    }
+
+
+    @Test
+    public void getDebugGoogleAttributesProductCode () {
         HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("productCode", "???");
-        given().params(mainParameters).spec(requestSpecification).when().get("googleattributes/productCode/{productCode}").then().statusCode(200);
+        mainParameters.put("productCode", "2037481");
+        debugController.getDebugAttributeByProductCode(mainParameters).stream().findAny().equals("Blue");
     }
 
     @Test
     public void getDebugGoogleAttributesProductCodeAndSkuCode () {//need to update basepath+requestSpec+found valid product code+skucode
         HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("productCode", "???");
-        mainParameters.put("skuCode", "???");
-        given().params(mainParameters).spec(requestSpecification).when().get("googleattributes/productCode/{productCode}/skuCode/{skuCode}").then().statusCode(200);
+        mainParameters.put("productCode", "2037483");
+        mainParameters.put("skuCode", "2037486");
+        debugController.getDebugGoogleAttrbProductCodeSkuCode(mainParameters).contains("Beige");
     }
 
     @Test
     public void getDebugMappings () {//need to update basepath+requestSpec+writeCheckFor response body
-        given().spec(requestSpecification).when().get("mappings").then().statusCode(200);
+         debugController.getDebugMappings().contains("CONTENT");
     }
 
     @Test
     public void getDebugMobileSkuCode () {//need to update basepath+requestSpec
         HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("skuCodes", "PALENVELOPE_5X7GOLD");
-        given().params(mainParameters).spec(requestSpecification).when().get("mobile/PALENVELOPE_5X7GOLD/").then().statusCode(200);
+        mainParameters.put("skuCodes", "2037486");
+        debugController.getDebugMobileSkuCode(mainParameters).contains("2037486");
     }
 
     @Test
     public void getDebugPimtables () {//need to update basepath+requestSpec
-        given().spec(requestSpecification).when().get("pimtables").then().statusCode(200);
+        debugController.getDebugPimTables().stream().findAny().equals("CONTENT DESIGN");
     }
 
     @Test
     public void getDebugPipDataServiceProductCode () {//need to update basepath+requestSpec+find valid product Code
         HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("productCode", "PALENVELOPE_5X7GOLD");
-        given().params(mainParameters).spec(requestSpecification).when().get("pipDataService/{productCode]/").then().statusCode(200);
+        mainParameters.put("productCode", "2037481");
+        debugController.getDebugPimDataProductCode(mainParameters).stream().findAny().equals("2037484");
     }
 
     @Test
-    public void getDebugProductCode () {//need to update basepath+requestSpec+find valid product Code
+    public void getDebugProductCode () {
         HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("productCode", "PALENVELOPE_5X7GOLD");
-        given().params(mainParameters).spec(requestSpecification).when().get("productCode/{productCode]/").then().statusCode(200);
+        mainParameters.put("productCode", "2037481");
+        debugController.getDebugProductCode(mainParameters).contains("Ikat Damask - Midnight Navy Plates");
     }
 
     //do we need to cover with tests endpoint restRepoIds?
@@ -213,22 +211,24 @@ public class ConfigFeedControllerTests  extends BaseSevice {
     @Test
     public void getDebugSflySkusProductCodeSkuCode () {//need to update basepath+requestSpec+find valid product Code
         HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("productCode", "PALENVELOPE_5X7GOLD");
-        given().params(mainParameters).spec(requestSpecification).when().get("sflySkus/{productCode}/{skuCode}").then().statusCode(200);
+        mainParameters.put("productCode", "2037481");
+        mainParameters.put("skuCode", "2037484");
+        debugController.getDebugProductCodeSkuCode(mainParameters).contains("PLATE01");
+
     }
 
     @Test
     public void getDebugShippingPriceSflySkuMinQntUseDefShipping () {//need to update basepath+requestSpec+find valid product Code
         HashMap<String, Object> mainParameters = new HashMap<>();
-        mainParameters.put("sflySku","string");
+        mainParameters.put("sflySku","2037484");
         mainParameters.put("minQnt", "1");
         mainParameters.put("useDefaultShipping", true);
-        given().params(mainParameters).spec(requestSpecification).when().get("shippingPrice/{sflySku}/{minQnt}/{useDefaultShipping}").then().statusCode(200);
+        debugController.getDebugShippingPrice(mainParameters).compareTo((float) 34.99);
     }
 
     @Test
-    public void getDebugTableMapping () {//need to update basepath+requestSpec
-        given().spec(requestSpecification).when().get("tablemapping").then().statusCode(200);
+    public void getDebugTableMapping () {//need to write better validation
+         Assert.assertFalse(debugController.getDebugTableMapping());
     }
 
     @Test
@@ -244,7 +244,7 @@ public class ConfigFeedControllerTests  extends BaseSevice {
 
     @Test
     public void getDebugTestFF () {//need to update basepath+requestSpec
-        given().spec(requestSpecification).when().get("testFF").then().statusCode(200);
+         Assert.assertTrue(debugController.getDebugTestFF());
     }
 
     @Test
@@ -389,21 +389,6 @@ public class ConfigFeedControllerTests  extends BaseSevice {
         mainParameters.put("vendor","BLOOMREACH");
         given().params(mainParameters).spec(requestSpecification).when().get("BLOOMREACH").then().statusCode(200);
     }
-
-
-
-
-
-
-
-        @Test
-        public void createNewFeed () {
-            ParamatersForFeedCreation paramaters = FeedGenarator.updateFeed();
-
-
-            AssertionsForClassTypes.assertThat(paramaters).isNotNull().extracting(ParamatersForFeedCreation::getFeedName)
-                    .isEqualTo("TestSergQAA");
-        }
 
 
 

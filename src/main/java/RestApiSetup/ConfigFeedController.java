@@ -1,5 +1,7 @@
 package RestApiSetup;
 
+import io.restassured.RestAssured;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,24 +15,24 @@ public class ConfigFeedController  extends RestSpec{
     }
 
     public List<String> getUsers(){
-       return given().spec(REQUEST_SPECIFICATION).get(EndPoints.GET_ALL).jsonPath().getList("feedName");
+       return RestAssured.given().spec(REQUEST_SPECIFICATION).get(EndPoints.GET_ALL).jsonPath().getList("feedName");
     }
 
     public List<String> getUsersScheduled(){
-        return given().spec(REQUEST_SPECIFICATION).get(EndPoints.GET_ALL_SCHEDULED).jsonPath().getList("feedName");
+        return RestAssured.given().spec(REQUEST_SPECIFICATION).get(EndPoints.GET_ALL_SCHEDULED).jsonPath().getList("feedName");
     }
 
     public String getUsersByName(){
-        return  given().spec(REQUEST_SPECIFICATION).get(EndPoints.GET_BY_FEEDNAME).jsonPath().getString("feedName");
+        return  RestAssured.given().spec(REQUEST_SPECIFICATION).get(EndPoints.GET_BY_FEEDNAME).jsonPath().getString("feedName");
     }
 
     public String createNewFeed(HashMap<String, Object> mainBody){
-       return   given().spec(REQUEST_SPECIFICATION).body(mainBody)
+       return   RestAssured.given().spec(REQUEST_SPECIFICATION).body(mainBody)
                 .put(EndPoints.PUT_CONFIG_INSERT).toString();
     }
 
     public String updateNewFeed(HashMap<String, Object> mainBody){
-        return   given().spec(REQUEST_SPECIFICATION).body(mainBody)
+        return   RestAssured.given().spec(REQUEST_SPECIFICATION).body(mainBody)
                 .put(EndPoints.PUT_CONFIG_UPDATE).toString();
     }
 

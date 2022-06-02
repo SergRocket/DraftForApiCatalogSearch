@@ -12,7 +12,6 @@ public abstract class RestSpec extends BaseSevice {
                 .setBaseUri(getBaseUrl("beta"))
                 .setBasePath(getBasePath())
                 .addHeader("Accept", "application/json")
-                .addHeader("Content-Type", "application/json")
                 .build();
     }
 

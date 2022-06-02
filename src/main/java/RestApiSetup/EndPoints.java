@@ -31,6 +31,8 @@ public interface EndPoints {
 
     String GET_GOOGLE_ATTRIBUTES_BY_PRODUCT_CODE = "googleattributes/productCode/1160921";
 
+    String GET_DEBUG_GENERATE_FULL_FEED = "generateFullFeed";
+
     String GET_GOOGLE_ATTRIBUTES_BY_PRODUCT_CODE_AND_SKU_CODE = "googleattributes/productCode/2037483/skuCode/2037486";
 
     String GET_DEBUG_MAPPINGS = "mappings";
@@ -47,7 +49,7 @@ public interface EndPoints {
 
     String GET_DEBUG_SKU_BY_PRODUCT_CODE_AND_SKU_CODE = "sflySkus/2037481/2037484";
 
-    String GET_DEBUG_SHIPPING_PRICE_BY_SKU_AND_QNT_DEFAULT_SHIPPING = "shippingPrice/PLATE01/1/true";
+    String GET_DEBUG_SHIPPING_PRICE_BY_SKU_AND_QNT_DEFAULT_SHIPPING = "shippingPrice/2037484/1/true";
 
     String GET_DEBUG_TABLE_MAPPING = "tablemapping";
 
