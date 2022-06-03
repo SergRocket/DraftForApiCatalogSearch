@@ -22,13 +22,14 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
 
     @Test
     public void VerifyColNamesCSProductsInGoogleFeed(){
-      // pipData.getsOptionsMap();
-     //  pipData.getsProductOptionsColor();
-     //  pipData.getsProductOptionsCartSizeId();
-     //  pipData.getsProductOptionsGREETING();
-     //  pipData.getsProductOptionsBluePrints();
-       pipData.getsProductOptionsBluePrintsValues();
+      pipData.getsOptionsMap();
+      pipData.getsProductOptionsColor();
+      pipData.getsProductOptionsCartSizeId();
+      pipData.getsProductOptionsGREETING();
+      pipData.getsProductOptionsBluePrintsValues();
     }
+
+
 
 
 

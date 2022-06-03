@@ -1,5 +1,6 @@
 package RestApiSetup;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -31,6 +32,85 @@ Root root = om.readValue(myJsonString, Root.class); */
         public String premiumSizeId;
         public ArrayList<Option> options;
 
+    }
+
+    public static class BluePrintOptions{
+        @JsonIgnore
+        public String displayName;
+        public String value;
+        public String sizeId;
+        public Boolean isBaseSku;
+        public ArrayList<ChildOptions> childOptions;
+        public String detailedDescription;
+        public String description;
+        public Boolean isPromoted;
+        public Integer dysplayOrder;
+        public String avaliability;
+        public String pricingSku;
+
+        public BluePrintOptions()
+        {
+            super();
+        }
+
+        public BluePrintOptions(String displayName, String value, String sizeId, Boolean isBaseSku, ArrayList<ChildOptions> childOptions, String detailedDescription, String description, Boolean isPromoted, Integer dysplayOrder, String avaliability, String pricingSku) {
+            this.displayName = displayName;
+            this.value = value;
+            this.sizeId = sizeId;
+            this.isBaseSku = isBaseSku;
+            this.childOptions = childOptions;
+            this.detailedDescription = detailedDescription;
+            this.description = description;
+            this.isPromoted = isPromoted;
+            this.dysplayOrder = dysplayOrder;
+            this.avaliability = avaliability;
+            this.pricingSku = pricingSku;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public String getSizeId() {
+            return sizeId;
+        }
+
+        public String getAvaliability() {
+            return avaliability;
+        }
+    }
+
+    public static class BluePrintOptinsMap {
+        public String color;
+        public String CARD_SIZE_ID;
+        public String GREETING;
+
+        public BluePrintOptinsMap()
+        {
+            super();
+        }
+
+        public BluePrintOptinsMap(String color, String CARD_SIZE_ID, String GREETING) {
+            this.color = color;
+            this.CARD_SIZE_ID = CARD_SIZE_ID;
+            this.GREETING = GREETING;
+        }
+
+        public String getColor() {
+            return color;
+        }
+
+        public String getCARD_SIZE_ID() {
+            return CARD_SIZE_ID;
+        }
+
+        public String getGREETING() {
+            return GREETING;
+        }
     }
 
     public static class OptionsFromBluePrint{
