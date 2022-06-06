@@ -10,15 +10,19 @@ import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.assertj.core.internal.Predicates;
 import org.hamcrest.Matchers;
 import org.testng.Assert;
+import org.testng.collections.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 
 public class PipData extends RestSpecRegression {
     //public PipData pipData;
@@ -123,6 +127,37 @@ public class PipData extends RestSpecRegression {
     }
 
 
+    public void getsProductOptionsBluePrintsTrim(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath()
+                .getJsonObject("optionResourceMap.optionsMap.TRIM");
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.equals("Rounded")));
+        List<ArrayList<String>> productOptdataBluePrints = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath()
+                .getJsonObject("blueprintOptions.options[0].values.childOptions.displayName[0]");
+        Assert.assertTrue(productOptdataBluePrints.stream().anyMatch(x->x.contains("TRIM")));
+    }
+
+    public void getsProductOptionsPricingSku(){
+        List<ArrayList<String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath()
+                .getJsonObject("blueprintOptions.options[0].values.childOptions.values[0].pricingSku[0]");
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("ROUNDED_TRIM_5X7_FLAT")));
+
+    }
+
+    public void getsProductOptionsPricingSku(){
+        List<ArrayList<String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath()
+                .getJsonObject("blueprintOptions.options[0].values.childOptions.values[0].pricingSku[0]");
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("ROUNDED_TRIM_5X7_FLAT")));
+
+    }
+
 
 
 
@@ -145,6 +180,7 @@ public class PipData extends RestSpecRegression {
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("optionResourceMap.optionsMap", OptionsMap.class);
         pipOptdata.forEach(x-> Assert.assertTrue(x.getColor().contains(x.color)));
+       List<ArrayList<String>> listF = productOptdataBluePrints.stream().filter(x->x.equals("TRIM")).collect(Collectors.toList());
         pipOptdata.forEach(x->Assert.assertTrue(x.getColor().contains(x.color)));
         pipOptdata.forEach(x->Assert.assertTrue(x.getcARD_SIZE_ID().contains(x.cARD_SIZE_ID)));
         pipOptdata.forEach(x->Assert.assertTrue(x.getgREETING().contains(x.gREETING)));

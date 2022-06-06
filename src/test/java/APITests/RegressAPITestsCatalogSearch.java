@@ -20,14 +20,27 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
         RestAssured.responseSpecification = responseSpecBuilder.build();
     }
 
-    @Test
+    @Test(description = "first and second tests")
     public void VerifyColNamesCSProductsInGoogleFeed(){
-      pipData.getsOptionsMap();
-      pipData.getsProductOptionsColor();
-      pipData.getsProductOptionsCartSizeId();
-      pipData.getsProductOptionsGREETING();
-      pipData.getsProductOptionsBluePrintsValues();
+      //pipData.getsOptionsMap();
+      //pipData.getsProductOptionsColor();
+      //pipData.getsProductOptionsCartSizeId();
+      //pipData.getsProductOptionsGREETING();
+     // pipData.getsProductOptionsBluePrintsValues();
+      pipData.getsProductOptionsBluePrintsTrim();
     }
+
+    @Test(description = "5th test")
+    public void VerifyColNamesForPricing(){
+        pipData.getsProductOptionsPricingSku();
+    }
+
+    @Test(description = "Verify the feature flag for C&S product variations")
+    public void VerifyFeatureFlag(){
+        pipData.getsProductOptionsPricingSku();
+    }
+
+
 
 
 
