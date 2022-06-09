@@ -37,28 +37,140 @@ public class PipData extends RestSpecRegression {
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.getgREETING().equals("CHRISTMAS")));
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.getpAPER_TYPE().contains("Regular")));
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.gettRIM().equals("Regular")));
-      Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.getpAPER_FINISH().contains("Matte")));
-
-     // Assert.assertTrue(pipOptdata.stream().allMatch(x->x.getpAPER_FINISH().equals(x.pAPER_FINISH)));
-
-      /*pipOptdata.forEach(x->Assert.assertTrue(x.getColor().contains(x.color)));
-      pipOptdata.forEach(x->Assert.assertTrue(x.getcARD_SIZE_ID().contains(x.cARD_SIZE_ID)));
-      pipOptdata.forEach(x->Assert.assertTrue(x.getgREETING().contains(x.gREETING)));
-      pipOptdata.forEach(x->Assert.assertTrue(x.getpAPER_FINISH().contains(x.pAPER_FINISH)));
-      pipOptdata.forEach(x->Assert.assertTrue(x.getpAPER_TYPE().contains(x.pAPER_TYPE)));
-      pipOptdata.forEach(x->Assert.assertTrue(x.gettRIM().contains(x.tRIM)));*/
-
-    }
-
-    public void getsProductOptionsColor(){
-        List<PipDataResponse.Value> productOptdata = given().spec(REQUEST_SPECIFICATION).
+        List<String> pipOptdataPaperFinish = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
-                statusCode(200).extract().body().jsonPath().getList("productOptions.values[0]",  PipDataResponse.Value.class);
-        Assert.assertTrue(productOptdata.stream().allMatch(x->x.getAvailability().contains("AVAILABLE")));
-        Assert.assertTrue(productOptdata.stream().allMatch(x->x.getDisplayName().contains("Brown")));
-        Assert.assertTrue(productOptdata.stream().allMatch(x->x.getValue().contains("#2C1E16")));
-        Assert.assertTrue(productOptdata.stream().allMatch(x->x.getDisplayOrder().equals(0)));
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].values[0].findAll{it.value == 'Matte'}.value");
+        Assert.assertTrue(pipOptdataPaperFinish.stream().anyMatch(x->x.contains("Matte")));
+        }
+
+    public void getProductDysplayNameColor(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("productOptions.findAll{it.key == 'color'}.displayName");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("DESIGN COLOR")));
     }
+
+    public void getProductDisplayNameCartSizeId(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("productOptions.findAll{it.key == 'CARD_SIZE_ID'}.displayName");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("FORMAT")));
+    }
+
+    public void getProductDisplayNameGreeting(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("productOptions.findAll{it.key == 'GREETING'}.displayName");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("GREETING")));
+    }
+
+    public void getProductDisplayNamePaperType(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].findAll{it.key == 'PAPER_TYPE'}.defaultValue");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("Regular")));
+    }
+
+    public void getProductDisplayNameTrim(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'TRIM'}.displayName");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("TRIM")));
+    }
+
+    public void getProductDisplayNamePaperFinish(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'PAPER_FINISH'}.displayName");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("FINISH")));
+    }
+
+    public void getProductDysplayNameColorValues(){
+       ArrayList<List<String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'color'}.values.value");
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("#2C1E16")));
+        ArrayList<List<String>> productOptdataColor = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'color'}.values.displayName");
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("#2C1E16")));
+        Assert.assertTrue(productOptdataColor.stream().anyMatch(x->x.contains("Brown")));
+    }
+
+    public void getProductDysplayNameCardSizeIdValues(){
+        ArrayList<List<String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'CARD_SIZE_ID'}.values.value");
+        ArrayList<List<String>> productOptdataSizeId = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'CARD_SIZE_ID'}.values.displayName");
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("23")));
+        Assert.assertTrue(productOptdataSizeId.stream().anyMatch(x->x.contains("5x7")));
+    }
+
+    public void getProductDysplayNameGreetingsValues(){
+        ArrayList<List<String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'GREETING'}.values.value");
+        ArrayList<List<String>> productOptdataGreet = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'GREETING'}.values.displayName");
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("CHRISTMAS")));
+        Assert.assertTrue(productOptdataGreet.stream().anyMatch(x->x.contains("Christmas")));
+    }
+    public void getProductDysplayNamePaperTypeValues(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].findAll{it.key == 'PAPER_TYPE'}.defaultValue");
+        ArrayList<List<String>> productOptdataPaperType = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getJsonObject("blueprintOptions.options[0].findAll{it.key == 'PAPER_TYPE'}.values.value");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("Regular")));
+        Assert.assertTrue(productOptdataPaperType.stream().allMatch(x->x.contains("Regular")));
+    }
+
+    public void getProductDysplayNameTrimValues(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'TRIM'}.displayName");
+        List<String> productOptdataTrim = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'TRIM'}.values[0].value");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.equals("TRIM")));
+        Assert.assertTrue(productOptdataTrim.stream().anyMatch(x->x.equals("Rounded")));
+    }
+
+    public void getProductDysplayNameFinishValues(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'PAPER_FINISH'}.values[0].displayName");
+        List<String> productOptdataFin = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'PAPER_FINISH'}.values[0].value");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.equals("Matte")));
+        Assert.assertTrue(productOptdataFin.stream().anyMatch(x->x.equals("Matte")));
+    }
+
+    public List<ImageURLs.ImageURL> getProductVerifyImageLink() {
+        List<ImageURLs.ImageURL> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("optionResourceMap.imageUrls[26]", ImageURLs.ImageURL.class);
+
+        return productOptdata;
+    }
+
+    public void getProductPricingValues(){
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'PAPER_FINISH'}.values[0].displayName");
+        List<String> productOptdataFin = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'PAPER_FINISH'}.values[0].value");
+        Assert.assertTrue(productOptdata.stream().allMatch(x->x.equals("Matte")));
+        Assert.assertTrue(productOptdataFin.stream().anyMatch(x->x.equals("Matte")));
+    }
+
+
 
     public void getsProductOptionsCartSizeId(){
         List<PipDataResponse.Value> productOptdata = given().spec(REQUEST_SPECIFICATION).
@@ -78,7 +190,6 @@ public class PipData extends RestSpecRegression {
     }
 
     public void getsProductOptionsBluePrints(){
-
         ArrayList<PipDataResponse.OptionsFromBluePrint> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath()
@@ -112,18 +223,6 @@ public class PipData extends RestSpecRegression {
         List<ArrayList<String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options.findAll{ it.key }.key");
         Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("PAPER_TYPE")));
-
-       // Assert.assertTrue(productOptdata.stream().anyMatch(x->x.getDisplayName().contains("Signature Smooth Cardstock")));
-       // Assert.assertTrue(productOptdata.stream().anyMatch(x->x.getValue().contains("Regular")));
-       // Assert.assertTrue(productOptdata.stream().allMatch(x->x.getSizeId().contains("23")));
-       /* List<List> productOptdataparent = given().spec(REQUEST_SPECIFICATION).
-                get(EndPointsRegress.GET_PRODUCT).jsonPath().getList("blueprintOptions[0].options");*/
-
-
-        //Assert.assertFalse(productOptdata.isEmpty());
-        //Assert.assertFalse(productOptdataparent.isEmpty());
-      //  ArrayList<Map<PipDataResponse.BluePrintOptions,?>>;
-
     }
 
 
@@ -149,7 +248,7 @@ public class PipData extends RestSpecRegression {
 
     }
 
-    public void getsProductOptionsPricingSku(){
+    public void getsProducftOptionsPricingSku(){
         List<ArrayList<String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath()
@@ -197,3 +296,5 @@ public class PipData extends RestSpecRegression {
                 Map<String, String> filteredMap = productOptdata
         .stream().filter(x->"key".equals(x.equals("PAPER_TYPE")))
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));*/
+
+//  ArrayList<Map<PipDataResponse.BluePrintOptions,?>>;

@@ -223,6 +223,29 @@ Root root = om.readValue(myJsonString, Root.class); */
         public String url;
     }
 
+    public static class ImageURL {
+        public String label;
+        public String imageUrl;
+
+        public ImageURL()
+        {
+            super();
+        }
+
+        public ImageURL(String label, String imageUrl) {
+            this.label = label;
+            this.imageUrl = imageUrl;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+    }
+
     public class DESIGNERCARD06{
         public ArrayList<Integer> quantities;
         public Integer defaultQuantity;
