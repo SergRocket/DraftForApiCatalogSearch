@@ -23,17 +23,32 @@ public class PricingData extends RestSpecRegressionPricing {
        Assert.assertTrue(pricingData.stream().anyMatch(x->x.getSku().equals("PLATE01")));
    }
 
-    public List<PricingResponceData.PricingItem> getPricingSummaryValidation(HashMap<String,Object> mainParam){
-        List<PricingResponceData.PricingItem> pricingData = given().spec(REQUEST_SPECIFICATION).
+    public void getPricingSummaryValidation(HashMap<String,Object> mainParam){
+        List<PricingResponceData.PricingItem> pricingItemData = given().spec(REQUEST_SPECIFICATION).
                 params(mainParam).get(EndPointsRegress.GET_PRICING_SALE_AND_REGURAL).then().
                 statusCode(200).extract().body().jsonPath().
                 getList("pricingItem", PricingResponceData.PricingItem.class);
 
-        /*Assert.assertTrue(pricingData.stream().anyMatch(x->x.getOrigTotalPrice().equals(19.99)));
-        Assert.assertTrue(pricingData.stream().anyMatch(x->x.getOrigUnitPrice().equals(19.99)));
-        Assert.assertTrue(pricingData.stream().anyMatch(x->x.getSaleUnitPrice().equals(19.99)));
-        Assert.assertTrue(pricingData.stream().anyMatch(x->x.getSaleTotalPrice().equals(19.99)));
-        Assert.assertTrue(pricingData.stream().anyMatch(x->x.getSku().equals("PLATE01")));*/
-        return pricingData;
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getOrigTotalPrice().equals(19.99)));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getOrigUnitPrice().equals(19.99)));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getSaleUnitPrice().equals(19.99)));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getSaleTotalPrice().equals(19.99)));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getSku().equals("PLATE01")));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getOrigTotalPrice().equals(3.49)));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getOrigUnitPrice().equals(3.49)));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getSaleUnitPrice().equals(3.49)));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getSaleTotalPrice().equals(3.49)));
+        Assert.assertTrue(pricingItemData.stream()
+                .anyMatch(x->x.getSku().equals("SQUARE8X870")));
+
     }
 }

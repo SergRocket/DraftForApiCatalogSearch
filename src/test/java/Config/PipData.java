@@ -159,6 +159,32 @@ public class PipData extends RestSpecRegression {
         return productOptdata;
     }
 
+    public List<String> getPhotoBooksColumnPhotoBookSize() {
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT_PHOTO_BOOKS_VERIF_COLUMNS).then().
+                statusCode(200).extract().body().jsonPath().get("productOptions.findAll{it.key=='PHOTO_BOOK_SIZE'}.values.value[0]");
+        return productOptdata;
+    }
+
+    public List<String> getPhotoBooksColumnPhotoBookCover() {
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT_PHOTO_BOOKS_VERIF_COLUMNS).then().
+                statusCode(200).extract().body().jsonPath()
+                .getList("productOptions.values[0].childOptions[0].find{it.key=='PHOTO_BOOK_COVER'}.values.value");
+        return productOptdata;
+    }
+
+    public List<String> getPhotoBooksColumnPageOptions() {
+        List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT_PHOTO_BOOKS_VERIF_COLUMNS).then().
+                statusCode(200).extract().body().jsonPath().getList("productOptions.values[0].childOptions[0].values[0].childOptions[0].find{it.key=='PHOTO_BOOK_PAGE_OPTIONS'}.values.value");
+        return productOptdata;
+    }
+
+
+
+
+
     public void getProductPricingValues(){
         List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().

@@ -256,6 +256,32 @@ Root root = om.readValue(myJsonString, Root.class); */
         public Data data;
     }
 
+    public class PhotoBooksCategoryes{
+        public String value;
+        public String displayOrder;
+        public String dysplayName;
+        public ArrayList<String> childOptions;
+        public String iconClass;
+        public String avaliability;
+
+        public PhotoBooksCategoryes(String value, String dysplayName) {
+            this.value = value;
+            this.dysplayName = dysplayName;
+        }
+        public PhotoBooksCategoryes()
+        {
+            super();
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public String getDysplayName() {
+            return dysplayName;
+        }
+    }
+
     public class FormatOptions{
     }
 

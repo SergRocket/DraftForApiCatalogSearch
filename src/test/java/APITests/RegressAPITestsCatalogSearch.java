@@ -96,17 +96,20 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
         HashMap<String, Object> mainParam = new HashMap<>();
         mainParam.put("productCode", "2037481");
         mainParam.put("skuCode","1084038");
-        //String[] skus = new String[] {"PLATE01","SQUARE8X870"};
         String[] skus = {"PLATE01","SQUARE8X870"};
         mainParam.put("sku", Arrays.asList(skus));
         pricingData.getPricingSummaryValidation(mainParam);
-        Assert.assertFalse(pricingData.getPricingSummaryValidation(mainParam).isEmpty());
     }
 
-
-
-
-
+    @Test(description = "Verify Photo Books category additional columns for variations")
+    public void VerifyPhotoBiiksCategorddituinalColumns(){
+        Assert.assertTrue(pipData.getPhotoBooksColumnPhotoBookSize().stream()
+                .anyMatch(x->x.equals("PHOTO_BOOK_SIZE_10X10")));
+        Assert.assertTrue(pipData.getPhotoBooksColumnPhotoBookCover().stream()
+                .anyMatch(x->x.equals("PHOTO_BOOK_COVER_HARD")));
+        Assert.assertTrue(pipData.getPhotoBooksColumnPageOptions().stream()
+                .allMatch(x->x.equals("PHOTO_BOOK_PAGE_OPTIONS_DELUXE_LAYFLAT")));
+    }
 
 
 
