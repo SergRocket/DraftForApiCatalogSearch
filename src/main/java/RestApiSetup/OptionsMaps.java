@@ -1,9 +1,8 @@
 package RestApiSetup;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class OptionsMap {
+public class OptionsMaps {
         public String color;
         @JsonProperty("CARD_SIZE_ID")
         public String cARD_SIZE_ID;
@@ -16,12 +15,12 @@ public class OptionsMap {
         @JsonProperty("PAPER_FINISH")
         public String pAPER_FINISH;
 
-        public OptionsMap()
+        public OptionsMaps()
         {
             super();
         }
 
-       public OptionsMap(String color, String cARD_SIZE_ID, String gREETING, String pAPER_TYPE, String tRIM, String pAPER_FINISH) {
+       public OptionsMaps(String color, String cARD_SIZE_ID, String gREETING, String pAPER_TYPE, String tRIM, String pAPER_FINISH) {
             this.color = color;
             this.cARD_SIZE_ID = cARD_SIZE_ID;
             this.gREETING = gREETING;

@@ -102,7 +102,7 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
     }
 
     @Test(description = "Verify Photo Books category additional columns for variations")
-    public void VerifyPhotoBiiksCategorddituinalColumns(){
+    public void VerifyPhotoBooksCategoryAdditionalColumns(){
         Assert.assertTrue(pipData.getPhotoBooksColumnPhotoBookSize().stream()
                 .anyMatch(x->x.equals("PHOTO_BOOK_SIZE_10X10")));
         Assert.assertTrue(pipData.getPhotoBooksColumnPhotoBookCover().stream()
@@ -111,6 +111,33 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
                 .allMatch(x->x.equals("PHOTO_BOOK_PAGE_OPTIONS_DELUXE_LAYFLAT")));
     }
 
+    @Test(description = "Google feeds optionResourceUID MD5 hash id column for C&S and PB")
+    public void VerifyOptionResourceUIDMD5Hash(){
+        pipData.getOptionmapAndUID();
+        Assert.assertTrue(pipData.getOptionmapAndUID().stream().findFirst().stream()
+                .anyMatch(x->x.getOptionsMap().stream().allMatch(y->y.getpHOTO_BOOK_SIZE()
+                        .equals("PHOTO_BOOK_SIZE_8X11"))));
+        Assert.assertTrue(pipData.getOptionmapAndUID().stream().findFirst().stream()
+                .anyMatch(x->x.getOptionsMap().stream().allMatch(y->y.getpHOTO_BOOK_COVER()
+                        .equals("PHOTO_BOOK_COVER_PREMIUM_LEATHER"))));
+        Assert.assertTrue(pipData.getOptionmapAndUID().stream().findFirst().stream()
+                .anyMatch(x->x.getOptionsMap().stream().findFirst().stream()
+                        .allMatch(y->y.getpHOTO_BOOK_PAGE_OPTIONS().equals("PHOTO_BOOK_PAGE_OPTIONS_DELUXE_LAYFLAT"))));
+        Assert.assertTrue(pipData.getOptionmapAndUID().stream().findFirst().stream()
+                .anyMatch(x->x.getOptionResourceUID().equals("34aa26a5231167787633ae510f211b57")));
+        Assert.assertTrue(pipData.getOptionmapAndUID().stream()
+                .filter(s->s.getOptionResourceUID().
+                equals("a3a7278bdd85918531e947218bad314c")).anyMatch(y->y.getOptionsMap()
+                        .stream().anyMatch(x->x.getpHOTO_BOOK_SIZE().equals("PHOTO_BOOK_SIZE_8X8"))));
+        Assert.assertTrue(pipData.getOptionmapAndUID().stream()
+                .filter(s->s.getOptionResourceUID().
+                        equals("f699852ee75babbf1082a0fc69d9a67b")).anyMatch(y->y.getOptionsMap()
+                        .stream().anyMatch(x->x.getpHOTO_BOOK_SIZE().equals("PHOTO_BOOK_SIZE_6X6"))));
+        Assert.assertTrue(pipData.getOptionmapAndUID().stream()
+                .filter(s->s.getOptionResourceUID().
+                        equals("6fe0e3f77fa18674496a00c472f7627c")).anyMatch(y->y.getOptionsMap()
+                        .stream().anyMatch(x->x.getpHOTO_BOOK_COVER().equals("PHOTO_BOOK_COVER_HARD"))));
 
+    }
 
 }

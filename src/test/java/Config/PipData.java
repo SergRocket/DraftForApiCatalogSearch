@@ -1,6 +1,7 @@
 package Config;
 
 import RestApiSetup.*;
+import RestApiSetup.HashResponce.OptionResourceMapItem;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,23 +16,23 @@ import org.hamcrest.Matchers;
 import org.testng.Assert;
 import org.testng.collections.Lists;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
+import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
+import static org.codehaus.groovy.reflection.ClassInfo.size;
 
 public class PipData extends RestSpecRegression {
     //public PipData pipData;
     ObjectMapper mapper = new ObjectMapper();
    // List<OptionsMap> pipOptdata;
     public void getsOptionsMap(){
-      List<OptionsMap> pipOptdata = given().spec(REQUEST_SPECIFICATION).
+      List<OptionsMaps> pipOptdata = given().spec(REQUEST_SPECIFICATION).
               get(EndPointsRegress.GET_PRODUCT).then().
-              statusCode(200).extract().body().jsonPath().getList("optionResourceMap.optionsMap", OptionsMap.class);
+              statusCode(200).extract().body().jsonPath().getList("optionResourceMap.optionsMap", OptionsMaps.class);
       Assert.assertTrue(pipOptdata.stream().allMatch(x->x.getColor().equals("#2C1E16")));
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.getcARD_SIZE_ID().equals("23")));
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.getgREETING().equals("CHRISTMAS")));
@@ -181,8 +182,23 @@ public class PipData extends RestSpecRegression {
         return productOptdata;
     }
 
+    public List<String> getOptionsMap() {
+        ArrayList<Map<String,String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT_PHOTO_BOOKS_VERIF_COLUMNS).then().
+                statusCode(200).extract().body().jsonPath().get("optionResourceMap.optionsMap");
+        Map<String, String> map = new HashMap<>();
+        for (Map<String, String> str : productOptdata)
+        { map.put(String.valueOf(str), String.valueOf(str.size())); }
+        List<String> keyList = map.keySet().stream().collect(Collectors.toList());
+        return keyList;
+    }
 
-
+    public List<OptionResourceMapItem> getOptionmapAndUID(){
+     List<OptionResourceMapItem> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT_PHOTO_BOOKS_VERIF_COLUMNS).then().
+                statusCode(200).extract().body().jsonPath().getList("optionResourceMap.findAll{it.optionsMap}", OptionResourceMapItem.class);
+        return productOptdata;
+    }
 
 
     public void getProductPricingValues(){
