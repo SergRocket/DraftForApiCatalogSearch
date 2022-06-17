@@ -3,6 +3,7 @@ package APITests;
 import Config.PipData;
 import Config.PricingData;
 import RestApiSetup.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.RestAssured;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -10,10 +11,14 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class RegressAPITestsCatalogSearch extends BaseSevice {
     public PipData pipData = new PipData();
@@ -44,7 +49,7 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
             "products permutations in the Google feed")
     public void VerifyProductOptValuesIngoogleFeed(){
         pipData.getsOptionsMap();
-        pipData.getsProductOptionsBluePrintsValues();
+       // pipData.getsProductOptionsBluePrintsValues();
         pipData.getProductDysplayNameColorValues();
         pipData.getProductDysplayNameCardSizeIdValues();
         pipData.getProductDysplayNameGreetingsValues();
@@ -112,32 +117,11 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
     }
 
     @Test(description = "Google feeds optionResourceUID MD5 hash id column for C&S and PB")
-    public void VerifyOptionResourceUIDMD5Hash(){
-        pipData.getOptionmapAndUID();
-        Assert.assertTrue(pipData.getOptionmapAndUID().stream().findFirst().stream()
-                .anyMatch(x->x.getOptionsMap().stream().allMatch(y->y.getpHOTO_BOOK_SIZE()
-                        .equals("PHOTO_BOOK_SIZE_8X11"))));
-        Assert.assertTrue(pipData.getOptionmapAndUID().stream().findFirst().stream()
-                .anyMatch(x->x.getOptionsMap().stream().allMatch(y->y.getpHOTO_BOOK_COVER()
-                        .equals("PHOTO_BOOK_COVER_PREMIUM_LEATHER"))));
-        Assert.assertTrue(pipData.getOptionmapAndUID().stream().findFirst().stream()
-                .anyMatch(x->x.getOptionsMap().stream().findFirst().stream()
-                        .allMatch(y->y.getpHOTO_BOOK_PAGE_OPTIONS().equals("PHOTO_BOOK_PAGE_OPTIONS_DELUXE_LAYFLAT"))));
-        Assert.assertTrue(pipData.getOptionmapAndUID().stream().findFirst().stream()
-                .anyMatch(x->x.getOptionResourceUID().equals("34aa26a5231167787633ae510f211b57")));
-        Assert.assertTrue(pipData.getOptionmapAndUID().stream()
-                .filter(s->s.getOptionResourceUID().
-                equals("a3a7278bdd85918531e947218bad314c")).anyMatch(y->y.getOptionsMap()
-                        .stream().anyMatch(x->x.getpHOTO_BOOK_SIZE().equals("PHOTO_BOOK_SIZE_8X8"))));
-        Assert.assertTrue(pipData.getOptionmapAndUID().stream()
-                .filter(s->s.getOptionResourceUID().
-                        equals("f699852ee75babbf1082a0fc69d9a67b")).anyMatch(y->y.getOptionsMap()
-                        .stream().anyMatch(x->x.getpHOTO_BOOK_SIZE().equals("PHOTO_BOOK_SIZE_6X6"))));
-        Assert.assertTrue(pipData.getOptionmapAndUID().stream()
-                .filter(s->s.getOptionResourceUID().
-                        equals("6fe0e3f77fa18674496a00c472f7627c")).anyMatch(y->y.getOptionsMap()
-                        .stream().anyMatch(x->x.getpHOTO_BOOK_COVER().equals("PHOTO_BOOK_COVER_HARD"))));
-
+    public void VerifyOptionResourceUIDMD5Hash() throws UnsupportedEncodingException, NoSuchAlgorithmException, JsonProcessingException {
+        Assert.assertTrue(pipData.getOptionmapAndUID().size() == pipData.getHashMap().size());
+        Assert.assertTrue(pipData.getHashMap().stream().
+        anyMatch(element ->pipData.getOptionmapAndUID().stream().anyMatch(s->s.getOptionResourceUID().equals(element))));
     }
-
 }
+
+

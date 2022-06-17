@@ -2,11 +2,14 @@ package Config;
 
 import RestApiSetup.*;
 import RestApiSetup.HashResponce.OptionResourceMapItem;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
 import io.restassured.path.json.JsonPath;
@@ -15,13 +18,21 @@ import org.assertj.core.internal.Predicates;
 import org.hamcrest.Matchers;
 import org.testng.Assert;
 import org.testng.collections.Lists;
-
+import javax.xml.bind.DatatypeConverter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static java.util.stream.Collectors.toMap;
+import static org.apache.groovy.json.internal.Chr.chars;
 import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.codehaus.groovy.reflection.ClassInfo.size;
 
@@ -182,23 +193,63 @@ public class PipData extends RestSpecRegression {
         return productOptdata;
     }
 
-    public List<String> getOptionsMap() {
+    public List<String> getHashMap() throws NoSuchAlgorithmException, UnsupportedEncodingException, JsonProcessingException {
         ArrayList<Map<String,String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT_PHOTO_BOOKS_VERIF_COLUMNS).then().
                 statusCode(200).extract().body().jsonPath().get("optionResourceMap.optionsMap");
         Map<String, String> map = new HashMap<>();
         for (Map<String, String> str : productOptdata)
         { map.put(String.valueOf(str), String.valueOf(str.size())); }
-        List<String> keyList = map.keySet().stream().collect(Collectors.toList());
-        return keyList;
-    }
+        //List<String> keyList = map.keySet().stream().collect(Collectors.toList());
+        List<String> filteredHashList = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<String> keyListForHasing = new ArrayList<>();
+        for( Map<String, String> as : productOptdata )
+        {
+            keyListForHasing.add(objectMapper.writeValueAsString(as));
+        }
+        for( String s : keyListForHasing )
+        {
+            filteredHashList.add(DatatypeConverter.printHexBinary(
+                    MessageDigest.getInstance("MD5").digest(s.getBytes("UTF-8"))).toLowerCase());
+        }
+        System.out.println(filteredHashList);
+        System.out.println(keyListForHasing);
+        return filteredHashList;
+        }
+
 
     public List<OptionResourceMapItem> getOptionmapAndUID(){
-     List<OptionResourceMapItem> productOptdata = given().spec(REQUEST_SPECIFICATION).
+        List<OptionResourceMapItem> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT_PHOTO_BOOKS_VERIF_COLUMNS).then().
                 statusCode(200).extract().body().jsonPath().getList("optionResourceMap.findAll{it.optionsMap}", OptionResourceMapItem.class);
+        Assert.assertTrue(productOptdata.stream()
+                .filter(s->s.getOptionResourceUID().
+                        equals("a3a7278bdd85918531e947218bad314c")).anyMatch(y->y.getOptionsMap()
+                        .stream().anyMatch(x->x.getpHOTO_BOOK_SIZE().equals("PHOTO_BOOK_SIZE_8X8"))));
+        Assert.assertTrue(productOptdata.stream()
+                .anyMatch(x->x.getOptionsMap().stream().allMatch(y->y.getpHOTO_BOOK_SIZE()
+                        .equals("PHOTO_BOOK_SIZE_8X11"))));
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.getOptionsMap().stream().allMatch(y->y.getpHOTO_BOOK_COVER()
+                .equals("PHOTO_BOOK_COVER_PREMIUM_LEATHER"))));
+        Assert.assertTrue(productOptdata.stream().anyMatch(x->x.getOptionsMap().stream()
+                .allMatch(y->y.getpHOTO_BOOK_PAGE_OPTIONS().equals("PHOTO_BOOK_PAGE_OPTIONS_DELUXE_LAYFLAT"))));
+        Assert.assertTrue(productOptdata.stream()
+                .filter(s->s.getOptionResourceUID().
+                        equals("a3a7278bdd85918531e947218bad314c")).anyMatch(y->y.getOptionsMap()
+                        .stream().anyMatch(x->x.getpHOTO_BOOK_SIZE().equals("PHOTO_BOOK_SIZE_8X8"))));
+        Assert.assertTrue(productOptdata.stream()
+                .filter(s->s.getOptionResourceUID().
+                        equals("f699852ee75babbf1082a0fc69d9a67b")).anyMatch(y->y.getOptionsMap()
+                        .stream().anyMatch(x->x.getpHOTO_BOOK_SIZE().equals("PHOTO_BOOK_SIZE_6X6"))));
+        Assert.assertTrue(productOptdata.stream()
+                .filter(s->s.getOptionResourceUID().
+                        equals("6fe0e3f77fa18674496a00c472f7627c")).anyMatch(y->y.getOptionsMap()
+                        .stream().anyMatch(x->x.getpHOTO_BOOK_COVER().equals("PHOTO_BOOK_COVER_HARD"))));
         return productOptdata;
     }
+
+
 
 
     public void getProductPricingValues(){
