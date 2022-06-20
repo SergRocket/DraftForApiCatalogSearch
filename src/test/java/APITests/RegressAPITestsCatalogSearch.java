@@ -11,6 +11,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -122,6 +123,16 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
         Assert.assertTrue(pipData.getHashMap().stream().
         anyMatch(element ->pipData.getOptionmapAndUID().stream().anyMatch(s->s.getOptionResourceUID().equals(element))));
     }
+
+    @Test(description = "Google feeds uniqueness of Titles for permutations")
+    public void VerifyUniquenessOfTitles() throws IOException {
+        Assert.assertTrue(pipData.getFeedsUniquenessForTitles().stream().anyMatch(x->x.getDisplayName().equals("Ceramic Mug (15oz) - Black")));
+        Assert.assertTrue(pipData.getFeedsUniquenessForTitles().stream().anyMatch(x->x.getValue().equals("black_mug")));
+        Assert.assertTrue(pipData.getFeedsUniquenessForTitles().stream().anyMatch(x->x.getPricingSku().equals("MUG_15_BLACK")));
+        Assert.assertTrue(pipData.getTitleFromMetadata().getTitle().equals("Classic Trio Mug"));
+        Assert.assertTrue(pipData.getTitleFromMetadata().getMoreDetails().getStyleName().equals("Classic Trio"));
+        Assert.assertTrue(pipData.getTitleFromMetadata().getProductTypeName().equals("Ceramic Mug"));
+        }
 }
 
 

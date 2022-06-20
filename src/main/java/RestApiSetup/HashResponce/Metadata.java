@@ -1,5 +1,8 @@
 package RestApiSetup.HashResponce;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Metadata{
 	private Object marketPlaceDesignerId;
 	private Object storytellingSku;

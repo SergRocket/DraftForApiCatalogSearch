@@ -1,7 +1,9 @@
 package Config;
 
 import RestApiSetup.*;
+import RestApiSetup.HashResponce.Metadata;
 import RestApiSetup.HashResponce.OptionResourceMapItem;
+import RestApiSetup.HashResponce.ResponseItem;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -30,6 +32,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static groovyjarjarantlr4.v4.runtime.misc.Utils.readFile;
 import static io.restassured.RestAssured.given;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.groovy.json.internal.Chr.chars;
@@ -200,7 +203,6 @@ public class PipData extends RestSpecRegression {
         Map<String, String> map = new HashMap<>();
         for (Map<String, String> str : productOptdata)
         { map.put(String.valueOf(str), String.valueOf(str.size())); }
-        //List<String> keyList = map.keySet().stream().collect(Collectors.toList());
         List<String> filteredHashList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> keyListForHasing = new ArrayList<>();
@@ -216,7 +218,7 @@ public class PipData extends RestSpecRegression {
         System.out.println(filteredHashList);
         System.out.println(keyListForHasing);
         return filteredHashList;
-        }
+    }
 
 
     public List<OptionResourceMapItem> getOptionmapAndUID(){
@@ -248,6 +250,21 @@ public class PipData extends RestSpecRegression {
                         .stream().anyMatch(x->x.getpHOTO_BOOK_COVER().equals("PHOTO_BOOK_COVER_HARD"))));
         return productOptdata;
     }
+
+    public List<ResponseItem> getFeedsUniquenessForTitles() throws IOException {
+        List<ResponseItem> productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT_VALIDATE_TILTES_VALUES).then().
+                statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[1].values[0].findAll{it.value=='black_mug'}", ResponseItem.class);
+        return productOptdata;
+    }
+
+    public Metadata getTitleFromMetadata() {
+        Metadata productOptdata = given().spec(REQUEST_SPECIFICATION).
+                get(EndPointsRegress.GET_PRODUCT_VALIDATE_TILTES_VALUES).then().
+                statusCode(200).extract().body().jsonPath().getObject("metadata", Metadata.class);
+        return productOptdata;
+    }
+
 
 
 
