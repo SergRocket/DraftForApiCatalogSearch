@@ -265,7 +265,33 @@ public class PipData extends RestSpecRegression {
         return productOptdata;
     }
 
+    public List<OptionsMaps> getOptionsMapForTestCaseWithSplunckCheck(){
+        List<OptionsMaps> pipOptdata = given().spec(REQUEST_SPECIFICATION).
+            get(EndPointsRegress.GET_PRODUCT).then().
+            statusCode(200).extract().body().jsonPath().getList("optionResourceMap.optionsMap", OptionsMaps.class);
+        return pipOptdata;
+    }
 
+    public Metadata getOptionsMapForTestCaseWithSplunckCheckAdditional(){
+        Metadata pipOptdata = given().spec(REQUEST_SPECIFICATION).
+            get(EndPointsRegress.GET_PRODUCT).then().
+            statusCode(200).extract().body().jsonPath().getObject("metadata", Metadata.class);
+        return pipOptdata;
+    }
+
+    public List<String> getOptionsMapForTestCaseWithSplunckCheckGetSignature(){
+        List<String> pipOptdata = given().spec(REQUEST_SPECIFICATION).
+            get(EndPointsRegress.GET_PRODUCT).then().
+            statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].displayName");
+        return pipOptdata;
+    }
+
+    public List<String> getOptionsMapForTestCaseWithSplunckCheckgetSquare(){
+        List<String> pipOptdata = given().spec(REQUEST_SPECIFICATION).
+            get(EndPointsRegress.GET_PRODUCT).then().
+            statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].values[1].findAll{it.displayName=='Square'}.displayName");
+        return pipOptdata;
+    }
 
 
 

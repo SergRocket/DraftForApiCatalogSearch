@@ -133,6 +133,26 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
         Assert.assertTrue(pipData.getTitleFromMetadata().getMoreDetails().getStyleName().equals("Classic Trio"));
         Assert.assertTrue(pipData.getTitleFromMetadata().getProductTypeName().equals("Ceramic Mug"));
         }
+
+    @Test(description = "Google feeds uniqueness of Titles for permutations")
+    public void verifyManuallyGeneratedFeed() {
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheck().size()>=30);
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheck().stream().anyMatch(x->x.getcARD_SIZE_ID().equals("89")));
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheck().stream().anyMatch(x->x.getpAPER_TYPE().equals("Pearl")));
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheck().stream().anyMatch(x->x.getpAPER_TYPE().equals("Luxe")));
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheck().stream().anyMatch(x->x.gettRIM().equals("Rounded")));
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheck().stream().anyMatch(x->x.gettRIM().equals("Scallop")));
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheck().stream().anyMatch(x->x.getgREETING().equals("HOLIDAY")));
+    }
+
+    @Test(description = "Google feeds uniqueness of Titles for permutations, additional validations")
+    public void verifyFeedUniquenessForTitles() {
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheckAdditional().getTitle().equals("Wreathed in Joy Holiday Card"));
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheckGetSignature().stream().anyMatch(x->x.contains("Signature Smooth Cardstock")));
+        Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheckgetSquare().stream().anyMatch(x->x.equals("Square")));
+    }
+
+
 }
 
 
