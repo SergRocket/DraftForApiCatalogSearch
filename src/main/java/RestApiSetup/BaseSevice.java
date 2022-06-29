@@ -23,6 +23,22 @@ public class BaseSevice extends ReportInitialization {
         return url;
     }
 
+    public static String getBaseUrlMapi(String env) {
+        String url = "https://catalog-nextgen-services."+env+".shutterfly.com";
+
+        return url;
+    }
+
+    protected String getBasePathMapi() {
+        return "/v1/search";
+    }
+
+    public static String getBaseUrlMapiApi2(String env) {
+        String url = "https://api2."+env+".shutterfly.com/catalog-nextgen-services";
+
+        return url;
+    }
+
     public static String getBaseUrlRegGetPricing(String env) {
         String url = "https://pricing-orchestration."+env+".shutterfly.com";
 

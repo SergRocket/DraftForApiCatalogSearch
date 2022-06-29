@@ -1,5 +1,6 @@
 package APITests;
 
+import Config.MapiData;
 import Config.PipData;
 import Config.PricingData;
 import RestApiSetup.*;
@@ -18,8 +19,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static Config.IsInteger.isInt;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RegressAPITestsCatalogSearch extends BaseSevice {
     public PipData pipData = new PipData();
@@ -27,6 +31,8 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
     public VerifFeatureData verifFeatureData = new VerifFeatureData();
     public FeatureFlagOnOff featureFlagOnOff = new FeatureFlagOnOff();
     public VerifyBloomreachSizeIDData verifyBloomreachSizeIDData = new VerifyBloomreachSizeIDData();
+    public MapiData mapiData = new MapiData();
+    public MapiDataApi2Stage mapiDataApi2Stage = new MapiDataApi2Stage();
     @BeforeTest
     private void beforeClass() {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().expectStatusCode(200)
@@ -150,6 +156,56 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
         Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheckAdditional().getTitle().equals("Wreathed in Joy Holiday Card"));
         Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheckGetSignature().stream().anyMatch(x->x.contains("Signature Smooth Cardstock")));
         Assert.assertTrue(pipData.getOptionsMapForTestCaseWithSplunckCheckgetSquare().stream().anyMatch(x->x.equals("Square")));
+    }
+
+    @Test(description = "MAPI test")
+    public void verifyMAPIResponseBody () {
+        Map<String,String> mainParameters = new HashMap<>();
+        mainParameters.put("SFLY-brand","us-sfly");
+        mainParameters.put("SFLY-channel","web");
+        mainParameters.put("q","enjoy%20cotton%20tote%26");
+        mainParameters.put("sid","_br_uid_2");
+        mainParameters.put("fl","avaliability%26");
+        mainParameters.put("url","https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
+        mainParameters.put("refurl","https://shutterfly.com%26");
+        mainParameters.put("size","100");
+        Assert.assertTrue(mapiData.getMapiData(mainParameters).getPage().getSize().equals(Integer.valueOf(100)));
+        assertThat(mapiData.getMapiData(mainParameters).getPage().getSize(), isInt());
+    }
+
+    @Test
+    public void givenAString_whenIsOnlyDigits_thenCorrect() {
+        String digits = "12";
+        assertThat(digits, isInt());
+    }
+
+    @Test(description = "MAPI test")
+    public void verifyMAPIResponseBodyApi2Stage () {
+        Map<String,String> mainParameters = new HashMap<>();
+        mainParameters.put("SFLY-brand","us-sfly");
+        mainParameters.put("SFLY-channel","web");
+        mainParameters.put("q","enjoy%20cotton%20tote%26");
+        mainParameters.put("sid","_br_uid_2");
+        mainParameters.put("fl","avaliability%26");
+        mainParameters.put("url","https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
+        mainParameters.put("refurl","https://shutterfly.com%26");
+        mainParameters.put("size","100");
+        Assert.assertTrue(mapiData.getMapiData(mainParameters).getPage().getSize().equals(Integer.valueOf(100)));
+    }
+
+
+    @Test(description = "MAPI API2 stage test")
+    public void verifyMAPIApi2ResponseBodyApi2Stage () {
+        Map<String,String> mainParameters = new HashMap<>();
+        mainParameters.put("SFLY-brand","us-sfly");
+        mainParameters.put("SFLY-channel","web");
+        mainParameters.put("q","enjoy%20cotton%20tote%26");
+        mainParameters.put("sid","_br_uid_2");
+        mainParameters.put("fl","avaliability%26");
+        mainParameters.put("url","https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
+        mainParameters.put("refurl","https://shutterfly.com%26");
+        mainParameters.put("size","120");
+        Assert.assertTrue(mapiData.getMapiData(mainParameters).getPage().getSize().equals(Integer.valueOf(120)));
     }
 
 

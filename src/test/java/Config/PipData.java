@@ -12,17 +12,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
+import io.restassured.config.HttpClientConfig;
 import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.assertj.core.internal.Predicates;
 import org.hamcrest.Matchers;
 import org.testng.Assert;
 import org.testng.collections.Lists;
 import javax.xml.bind.DatatypeConverter;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -292,6 +297,31 @@ public class PipData extends RestSpecRegression {
             statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].values[1].findAll{it.displayName=='Square'}.displayName");
         return pipOptdata;
     }
+
+    public static ArrayList<String[]> tsvReader(File fileFortesting) {
+        ArrayList<String[]> Data = new ArrayList<>(); //initializing a new ArrayList out of String[]'s
+        try (BufferedReader TSVReader = new BufferedReader(new FileReader(fileFortesting))) {
+            String line = null;
+            while ((line = TSVReader.readLine()) != null) {
+                String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
+                Data.add(lineItems); //adding the splitted line array to the ArrayList
+            }
+        } catch (Exception e) {
+            System.out.println("Something went wrong");
+        }
+        return Data;
+    }
+
+    RequestConfig requestConfig = RequestConfig.custom()
+        .setConnectTimeout(5000)
+        .setConnectionRequestTimeout(5000)
+        .build();
+
+    HttpClientConfig httpClientFactory = HttpClientConfig.httpClientConfig()
+        .httpClientFactory(() -> HttpClientBuilder.create()
+            .setDefaultRequestConfig(requestConfig)
+            .build());
+
 
 
 
