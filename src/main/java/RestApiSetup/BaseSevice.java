@@ -30,7 +30,7 @@ public class BaseSevice extends ReportInitialization {
     }
 
     protected String getBasePathMapi() {
-        return "/v1/search";
+        return "/v1/search/";
     }
 
     public static String getBaseUrlMapiApi2(String env) {

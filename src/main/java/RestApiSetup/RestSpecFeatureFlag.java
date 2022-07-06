@@ -3,7 +3,7 @@ package RestApiSetup;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 
-public class RestSpecFeatureFlag extends BaseSevice{
+public abstract class RestSpecFeatureFlag extends BaseSevice{
     public RequestSpecification REQUEST_SPECIFICATION;
     public RestSpecFeatureFlag(){
         REQUEST_SPECIFICATION = new RequestSpecBuilder()

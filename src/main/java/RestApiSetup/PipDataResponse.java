@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 public class PipDataResponse {
-    // import com.fasterxml.jackson.databind.ObjectMapper; // version 2.11.1
-// import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1
-/* ObjectMapper om = new ObjectMapper();
-Root root = om.readValue(myJsonString, Root.class); */
+
     public class _6X8FLATCARD06{
         public ArrayList<Integer> quantities;
         public Integer defaultQuantity;

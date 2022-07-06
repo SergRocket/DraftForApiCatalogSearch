@@ -37,12 +37,17 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static Config.IsArrayOfInt.isArrayOfInts;
+import static Config.IsDouble.isDouble;
+import static Config.IsInteger.isInt;
+import static Config.IsString.isString;
 import static groovyjarjarantlr4.v4.runtime.misc.Utils.readFile;
 import static io.restassured.RestAssured.given;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.groovy.json.internal.Chr.chars;
 import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.codehaus.groovy.reflection.ClassInfo.size;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PipData extends RestSpecRegression {
     //public PipData pipData;
@@ -54,19 +59,40 @@ public class PipData extends RestSpecRegression {
               statusCode(200).extract().body().jsonPath().getList("optionResourceMap.optionsMap", OptionsMaps.class);
       Assert.assertTrue(pipOptdata.stream().allMatch(x->x.getColor().equals("#2C1E16")));
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.getcARD_SIZE_ID().equals("23")));
+        int size = pipOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(pipOptdata.get(i).getcARD_SIZE_ID(), isInt());
+        }
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.getgREETING().equals("CHRISTMAS")));
+        for(int i=0; i<=size; i++){
+            assertThat(pipOptdata.get(i).getgREETING(), isString());
+        }
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.getpAPER_TYPE().contains("Regular")));
+        for(int i=0; i<=size; i++){
+            assertThat(pipOptdata.get(i).getpAPER_TYPE(), isString());
+        }
       Assert.assertTrue(pipOptdata.stream().anyMatch(x->x.gettRIM().equals("Regular")));
+        for(int i=0; i<=size; i++){
+            assertThat(pipOptdata.get(i).gettRIM(), isString());
+        }
         List<String> pipOptdataPaperFinish = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].values[0].findAll{it.value == 'Matte'}.value");
         Assert.assertTrue(pipOptdataPaperFinish.stream().anyMatch(x->x.contains("Matte")));
+        int sizeFinish = pipOptdataPaperFinish.size()-1;
+        for(int i=0; i<=sizeFinish; i++){
+            assertThat(pipOptdataPaperFinish.get(i), isString());
         }
+      }
 
     public void getProductDysplayNameColor(){
         List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("productOptions.findAll{it.key == 'color'}.displayName");
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("DESIGN COLOR")));
     }
 
@@ -74,6 +100,10 @@ public class PipData extends RestSpecRegression {
         List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("productOptions.findAll{it.key == 'CARD_SIZE_ID'}.displayName");
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("FORMAT")));
     }
 
@@ -81,6 +111,10 @@ public class PipData extends RestSpecRegression {
         List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("productOptions.findAll{it.key == 'GREETING'}.displayName");
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("GREETING")));
     }
 
@@ -88,6 +122,10 @@ public class PipData extends RestSpecRegression {
         List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].findAll{it.key == 'PAPER_TYPE'}.defaultValue");
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("Regular")));
     }
 
@@ -95,6 +133,10 @@ public class PipData extends RestSpecRegression {
         List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'TRIM'}.displayName");
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("TRIM")));
     }
 
@@ -102,6 +144,10 @@ public class PipData extends RestSpecRegression {
         List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'PAPER_FINISH'}.displayName");
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("FINISH")));
     }
 
@@ -135,9 +181,18 @@ public class PipData extends RestSpecRegression {
         ArrayList<List<String>> productOptdataGreet = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'GREETING'}.values.displayName");
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i).toString(), isString());
+        }
         Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("CHRISTMAS")));
+        int sizeGreet = productOptdataGreet.size()-1;
+        for(int i=0; i<=sizeGreet; i++){
+            assertThat(productOptdataGreet.get(i).toString(), isString());
+        }
         Assert.assertTrue(productOptdataGreet.stream().anyMatch(x->x.contains("Christmas")));
     }
+
     public void getProductDysplayNamePaperTypeValues(){
         List<String> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
@@ -145,8 +200,17 @@ public class PipData extends RestSpecRegression {
         ArrayList<List<String>> productOptdataPaperType = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getJsonObject("blueprintOptions.options[0].findAll{it.key == 'PAPER_TYPE'}.values.value");
+
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.contains("Regular")));
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdataPaperType.stream().allMatch(x->x.contains("Regular")));
+        int sizePaperType = productOptdataPaperType.size()-1;
+        for(int i=0; i<=sizePaperType; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
     }
 
     public void getProductDysplayNameTrimValues(){
@@ -156,8 +220,17 @@ public class PipData extends RestSpecRegression {
         List<String> productOptdataTrim = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'TRIM'}.values[0].value");
+        int sizePaperType = productOptdata.size()-1;
+        for(int i=0; i<=sizePaperType; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.equals("TRIM")));
+        int sizeTrim = productOptdataTrim.size()-1;
+        for(int i=0; i<=sizeTrim; i++){
+            assertThat(productOptdataTrim.get(i), isString());
+        }
         Assert.assertTrue(productOptdataTrim.stream().anyMatch(x->x.equals("Rounded")));
+
     }
 
     public void getProductDysplayNameFinishValues(){
@@ -167,7 +240,15 @@ public class PipData extends RestSpecRegression {
         List<String> productOptdataFin = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getList("blueprintOptions.options[0].values[0].childOptions[0].findAll{it.key == 'PAPER_FINISH'}.values[0].value");
+        int sizeTrim = productOptdata.size()-1;
+        for(int i=0; i<=sizeTrim; i++){
+            assertThat(productOptdata.get(i), isString());
+        }
         Assert.assertTrue(productOptdata.stream().allMatch(x->x.equals("Matte")));
+        int sizeFin = productOptdataFin.size()-1;
+        for(int i=0; i<=sizeFin; i++){
+            assertThat(productOptdataFin.get(i), isString());
+        }
         Assert.assertTrue(productOptdataFin.stream().anyMatch(x->x.equals("Matte")));
     }
 
@@ -207,7 +288,9 @@ public class PipData extends RestSpecRegression {
                 statusCode(200).extract().body().jsonPath().get("optionResourceMap.optionsMap");
         Map<String, String> map = new HashMap<>();
         for (Map<String, String> str : productOptdata)
-        { map.put(String.valueOf(str), String.valueOf(str.size())); }
+        {
+            map.put(String.valueOf(str), String.valueOf(str.size()));
+        }
         List<String> filteredHashList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> keyListForHasing = new ArrayList<>();

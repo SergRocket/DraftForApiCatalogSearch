@@ -80,7 +80,7 @@ public class ConfigFeedControllerTests  extends BaseSevice {
     public void postConfigFeedCreateVendor () {
         HashMap<String, Object> mainBody = new HashMap<>();
         mainBody.put("catalog","string");
-        mainBody.put("feedName","TestQA244");
+        mainBody.put("feedName","TestQA24554");
         mainBody.put("feedType","PARTIAL");
         mainBody.put("ftp", true);
         List<String> parametersSampleProductCodes = new ArrayList<>();

@@ -11,8 +11,6 @@ public abstract class RestSpecMapi extends BaseSevice {
             .setBasePath(getBasePathMapi())
             .addHeader("Accept", "application/json")
             .addHeader("Content-Type", "application/x-www-form-urlencoded")
-            .addHeader("SFLY-brand","us-sfly")
-            .addHeader("SFLY-channel","web")
             .build();
     }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Page{
 	private int number;
-	private Integer size;
+	private String size;
 	private int totalPages;
 	private int totalElements;
 
