@@ -57,8 +57,8 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
     @Test(description = "Verify the product options values of the C&S " +
             "products permutations in the Google feed")
     public void VerifyProductOptValuesIngoogleFeed(){
-       pipData.getsOptionsMap();
-       pipData.getsProductOptionsBluePrintsValues();
+      // pipData.getsOptionsMap();
+      // pipData.getsProductOptionsBluePrintsValues();
        pipData.getProductDysplayNameColorValues();
        pipData.getProductDysplayNameCardSizeIdValues();
        pipData.getProductDysplayNameGreetingsValues();
@@ -216,16 +216,12 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
     @Test(description = "MAPI API2 stage test")
     public void verifyMAPIApi2ResponseBodyApi2Stage () {
         Map<String,String> mainParameters = new HashMap<>();
-        mainParameters.put("SFLY-brand","us-sfly");
-        mainParameters.put("SFLY-channel","web");
-        mainParameters.put("q","enjoy%20cotton%20tote%26");
-        mainParameters.put("sid","_br_uid_2");
-        mainParameters.put("fl","avaliability%26");
+        mainParameters.put("fl","skuid");
         mainParameters.put("url","https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
         mainParameters.put("refurl","https://shutterfly.com%26");
-        mainParameters.put("size","120");
-        mainParameters.put("sfly-apikey","vHAx0uG8Ndr6WJf2vu697D4HnPHu5WfG");
-        Assert.assertTrue(mapiData.getMapiData(mainParameters).getPage().getSize().equals(Integer.valueOf(120)));
+        //mainParameters.put("sfly-apikey","vHAx0uG8Ndr6WJf2vu697D4HnPHu5WfG");
+        //Assert.assertTrue(mapiData.getMapiData(mainParameters).getPage().getSize().equals(Integer.valueOf(120)));
+        Assert.assertFalse(mapiData.getMapiDataNegat(mainParameters).isEmpty());
     }
 
 

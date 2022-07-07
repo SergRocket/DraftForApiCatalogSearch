@@ -155,11 +155,20 @@ public class PipData extends RestSpecRegression {
        ArrayList<List<String>> productOptdata = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'color'}.values.value");
+        int sizeTrim = productOptdata.size()-1;
+        for(int i=0; i<=sizeTrim; i++){
+            assertThat(productOptdata.get(i).toString(), isString());
+        }
         Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("#2C1E16")));
         ArrayList<List<String>> productOptdataColor = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'color'}.values.displayName");
         Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("#2C1E16")));
+        int size = productOptdataColor.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdataColor.get(i).toString(),
+                isString());
+        }
         Assert.assertTrue(productOptdataColor.stream().anyMatch(x->x.contains("Brown")));
     }
 
@@ -170,7 +179,15 @@ public class PipData extends RestSpecRegression {
         ArrayList<List<String>> productOptdataSizeId = given().spec(REQUEST_SPECIFICATION).
                 get(EndPointsRegress.GET_PRODUCT).then().
                 statusCode(200).extract().body().jsonPath().getJsonObject("productOptions.findAll{it.key == 'CARD_SIZE_ID'}.values.displayName");
+        int size = productOptdata.size()-1;
+        for(int i=0; i<=size; i++){
+            assertThat(productOptdata.get(i).toString().replaceAll("[^a-zA-Z0-9]",""), isInt());
+        }
         Assert.assertTrue(productOptdata.stream().anyMatch(x->x.contains("23")));
+        int sizeOpt = productOptdataSizeId.size()-1;
+        for(int i=0; i<=sizeOpt; i++){
+            assertThat(productOptdataSizeId.get(i).toString().replaceAll("x","").replaceAll("[^a-zA-Z0-9]",""), isInt());
+        }
         Assert.assertTrue(productOptdataSizeId.stream().anyMatch(x->x.contains("5x7")));
     }
 

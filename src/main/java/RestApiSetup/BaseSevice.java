@@ -34,7 +34,7 @@ public class BaseSevice extends ReportInitialization {
     }
 
     public static String getBaseUrlMapiApi2(String env) {
-        String url = "https://api2."+env+".shutterfly.com/catalog-nextgen-services";
+        String url = "https://api2."+env+".shutterfly.com";
 
         return url;
     }

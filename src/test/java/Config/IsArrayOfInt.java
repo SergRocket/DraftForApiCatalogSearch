@@ -1,14 +1,15 @@
 package Config;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class IsArrayOfInt extends TypeSafeMatcher<ArrayList<String>> {
+public class IsArrayOfInt extends TypeSafeMatcher <ArrayList<List<String>>> {
 
     @Override
-    protected boolean matchesSafely(ArrayList<String> item) {
+    protected boolean matchesSafely(ArrayList<List<String>> item) {
         boolean a = true;
         for(int i = 0 ; i <= item.size() -1; i++) {
             try {
@@ -26,7 +27,7 @@ public class IsArrayOfInt extends TypeSafeMatcher<ArrayList<String>> {
         description.appendText("is array of ints");
     }
 
-    public static Matcher<ArrayList<String>> isArrayOfInts(){
+    public static Matcher<ArrayList<List<String>>> isArrayOfInts(){
         return new IsArrayOfInt();
     }
 
