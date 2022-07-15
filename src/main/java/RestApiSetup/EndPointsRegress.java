@@ -14,4 +14,5 @@ public interface EndPointsRegress {
     String GET_PRODUCT_BLOOMREACH_VERIF_SIZE_ID = "product/1524847";//1524840
     String GET_PRODUCT_PHOTO_BOOKS_VERIF_COLUMNS = "product/1495080";
     String GET_PRODUCT_VALIDATE_TILTES_VALUES = "product/1274044";
+    String GET_PRODUCT_SUGGEST_IF_INVALID_QUERY = "/v1/search";
 }

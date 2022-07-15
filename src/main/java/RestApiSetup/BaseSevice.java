@@ -45,6 +45,12 @@ public class BaseSevice extends ReportInitialization {
         return url;
     }
 
+    public static String getBaseUrlSuggestionTest(String env) {
+        String url = "https://pricing-orchestration."+env+".shutterfly.com";
+
+        return url;
+    }
+
     public static String getBaseUrlRegFeatureFlag(String env) {
         String url = "https://product-feed."+env+".shutterfly.com";
 
@@ -81,6 +87,10 @@ public class BaseSevice extends ReportInitialization {
 
     protected String getBasePathReg() {
         return "/pipdata/v1/";
+    }
+
+    protected String getBasePathRegSuggestion() {
+        return "";
     }
 
     protected String getBasePathRegVerifySizeId() {
