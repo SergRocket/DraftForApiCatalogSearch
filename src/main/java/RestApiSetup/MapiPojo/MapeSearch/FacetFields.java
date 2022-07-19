@@ -1,7 +1,23 @@
-package RestApiSetup.MapiPojo;
+package RestApiSetup.MapiPojo.MapeSearch;
 
+import java.util.ArrayList;
 import java.util.List;
+import RestApiSetup.MapiPojo.CategoryItem;
+import RestApiSetup.MapiPojo.ColorShadeHexValueItem;
+import RestApiSetup.MapiPojo.DefaultNumberOfPhotosItem;
+import RestApiSetup.MapiPojo.DesignerCodeItem;
+import RestApiSetup.MapiPojo.DimensionsItem;
+import RestApiSetup.MapiPojo.FeaturedItem;
+import RestApiSetup.MapiPojo.Mediums;
+import RestApiSetup.MapiPojo.MinPriceItem;
+import RestApiSetup.MapiPojo.ProductTypeItem;
+import RestApiSetup.MapiPojo.SalePriceItem;
+import RestApiSetup.MapiPojo.ShapeNameItem;
+import RestApiSetup.MapiPojo.ThemeItem;
+import RestApiSetup.MapiPojo.Topics;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FacetFields{
 	private List<FeaturedItem> featured;
 	private List<MinPriceItem> minPrice;
@@ -14,6 +30,18 @@ public class FacetFields{
 	private List<ProductTypeItem> productType;
 	private List<DimensionsItem> dimensions;
 	private List<DefaultNumberOfPhotosItem> defaultNumberOfPhotos;
+	private ArrayList<Mediums> medium;
+	private ArrayList<Topics> topic;
+
+
+
+	public ArrayList<Mediums> getMedium() {
+		return medium;
+	}
+
+	public ArrayList<Topics> getTopic() {
+		return topic;
+	}
 
 	public List<FeaturedItem> getFeatured(){
 		return featured;

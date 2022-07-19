@@ -1,5 +1,8 @@
 package RestApiSetup.MapiPojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoryItem{
 	private String treePath;
 	private String parent;

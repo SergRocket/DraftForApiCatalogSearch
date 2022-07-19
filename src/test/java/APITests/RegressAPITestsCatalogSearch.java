@@ -184,46 +184,34 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
       assertThat(pipData.getOptionsMapForTestCaseWithSplunckCheckAdditional().getTitle(), isString());
     }
 
-    @Test(description = "MAPI test")
-    public void verifyMAPIResponseBody () {
-        Map<String,String> mainParameters = new HashMap<>();
-        mainParameters.put("fl","cid,description,featured,keywords,pid,price,price_range,productCode" +
-            ",productMinPrice,productMinSalePrice,productType,sale_price,sale_price_range,sku_color" +
-            ",skuid,sflySkuId,sku_price,sku_sale_price,sku_swatch_images" +
-            ",sku_thumb_images,targetCategory,targetSubcategory,thumb_image,thumbnailUrl,title,url");
-        mainParameters.put("url","https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
-        mainParameters.put("refurl","https://shutterfly.com%");
-        mainParameters.put("q","enjoy%20cotton%20tote&");
-        mainParameters.put("sid"," _br_uid_2");
-        System.out.println(mapiData.getMapiData(mainParameters));
-    }
-
-    @Test(description = "MAPI test")
-    public void verifyMAPIResponseBodyApi2Stage () {
-        Map<String,String> mainParameters = new HashMap<>();
-        mainParameters.put("fl","avaliability%26");
-        mainParameters.put("url","https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
-        mainParameters.put("refurl","https://shutterfly.com%26");
-        mainParameters.put("size","100");
-        //Assert.assertTrue(mapiData.getMapiData(mainParameters).getSize().equals(Integer.valueOf(100)));
-    }
-
-
-    @Test(description = "MAPI API2 stage test")
-    public void verifyMAPIApi2ResponseBodyApi2Stage () {
+    @Test(description = "MAPI API2 search stage test")
+    public void verifyMAPIApi2ResponseBodyApi2Stage() {
         Map<String,String> mainParameters = new HashMap<>();
         mainParameters.put("url","https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
         mainParameters.put("refurl","https://shutterfly.com%");
-        mainParameters.put("sid","uid%3D6568753045451%3Av%3D12.0%3Ats%3D1646152453674%3Ahc%3D440&");
-        mainParameters.put("sfly-apikey", "G8z1COg2lGr0SqDO38yg7Lc9ImaKo45o");
-        mainParameters.put("fl","availability,title,description,productTypeName,productTypeId,thumb_image" +
-            ",numberOfPhotos,alternativeViewList,colorFamilyCode,sellableProductVariantId,price,minPrice,sale_price" +
-            ",min_sale_price,productTypeVariant,contentDesignVariant&");
-        mainParameters.put("q", "enjoy%20cotton%20tote&");
-        System.out.println(mapiData.getMapiDataNegat(mainParameters));
+        mainParameters.put("sid","_br_uid_2");
+        mainParameters.put("fl","title");
+        mainParameters.put("q", "mug");
+        Assert.assertTrue(mapiData.getMapiData(mainParameters).getPage().getSize()>=50);
+        Assert.assertTrue(mapiData.getMapiData(mainParameters).getFacets().getFacetFields().getMedium().stream().anyMatch(x->x.getName().equals("Art")));
+        Assert.assertTrue(mapiData.getMapiData(mainParameters).getFacets().getFacetFields().getTopic().stream().anyMatch(x->x.getName().equals("Botanical")));
+
     }
 
-    @Test(description = "Vefify suggestion is in the response with muge query")
+    @Test(description = "MAPI API2 search stage test with filter for prices")
+    public void verifyMAPIApi2ResponseBodyApi2StageWithPriceFilter() {
+        Map<String,String> mainParameters = new HashMap<>();
+        mainParameters.put("url","https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
+        mainParameters.put("refurl","https://shutterfly.com%");
+        mainParameters.put("sid","_br_uid_2");
+        mainParameters.put("fl","price,sale_price,title");
+        mainParameters.put("q", "mug");
+        Assert.assertTrue(mapiData.getMapiData(mainParameters).getFacets().getFacetRanges().getPrice().stream().anyMatch(x->x.getCount()==9));
+        Assert.assertTrue(mapiData.getMapiData(mainParameters).getResourceList().size()==mapiData.getMapiData(mainParameters)
+            .getFacets().getFacetRanges().getPrice().get(2).getCount());
+    }
+
+    @Test(description = "Verify suggestion is in the response with muge query")
     public void verifySuggestionIfInvalidQueryMugeIsApplied() {
         HashMap<String, String> mainParam = new HashMap<>();
         mainParam.put("size","100");
@@ -239,7 +227,7 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
         Assert.assertTrue(suggestionData.getSuggestions(mainParam).getDidYouMean().stream().anyMatch(i->i.contains("mug")));
     }
 
-    @Test(description = "Vefify suggestion is in the response with help query")
+    @Test(description = "Verify suggestion is in the response with help query")
     public void verifySuggestionIfQueryHelpIsApplied() {
         HashMap<String, String> mainParam = new HashMap<>();
         mainParam.put("size","100");
@@ -254,7 +242,7 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
         Assert.assertTrue(suggestionData.getSuggestions(mainParam).getKeywordRedirect().getRedirectedUrl().equals("support.shutterfly.com/"));
     }
 
-    @Test(description = "Vefify suggestion is in the response with help query")
+    @Test(description = "Verify suggestion is in the response with help query")
     public void verifySuggestionIfQueryJunkStyleIsApplied() {
         HashMap<String, String> mainParam = new HashMap<>();
         mainParam.put("size", "100");

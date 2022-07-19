@@ -1,4 +1,4 @@
-package RestApiSetup.MapiPojo;
+package RestApiSetup.MapiPojo.MapeSearch;
 
 public class Page{
 	private int number;

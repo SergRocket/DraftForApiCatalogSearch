@@ -7,7 +7,7 @@ public abstract class RestSpecMapi extends BaseSevice {
     public RequestSpecification REQUEST_SPECIFICATION;
     public RestSpecMapi(){
         REQUEST_SPECIFICATION = new RequestSpecBuilder()
-            .setBaseUri(getBaseUrlMapiApi2("stage"))
+            .setBaseUri(getBaseUrlMapiApi2("beta"))
             .setBasePath(getBasePathMapi())
             .addHeader("Accept", "application/json")
             .build();

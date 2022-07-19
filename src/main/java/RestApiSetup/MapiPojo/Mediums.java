@@ -3,11 +3,13 @@ package RestApiSetup.MapiPojo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Facets{
+public class Mediums {
 
-	private FacetFields facet_fields;
+    private String name;
+    private int count;
 
-	public FacetFields getFacetFields(){
-		return facet_fields;
-	}
+    public String getName() {
+        return name;
+    }
+
 }

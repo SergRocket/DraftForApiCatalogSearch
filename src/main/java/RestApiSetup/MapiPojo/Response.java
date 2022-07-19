@@ -1,6 +1,8 @@
 package RestApiSetup.MapiPojo;
 
 import java.util.List;
+import RestApiSetup.MapiPojo.MapeSearch.Facets;
+import RestApiSetup.MapiPojo.MapeSearch.Page;
 
 public class Response{
 	private Page page;
