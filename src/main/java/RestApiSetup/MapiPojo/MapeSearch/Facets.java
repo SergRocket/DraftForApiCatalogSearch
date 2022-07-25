@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Facets{
 
-	public FacetField facetFields;
-	public FacetFields facet_fields;
+	public FacetField facetField;
+	public FacetFields facetFields;
 	public FacetRanges facetRanges;
 
-	public Facets(FacetField facetFields, FacetFields facet_fields, FacetRanges facetRanges) {
+	public Facets(FacetField facetField, FacetFields facetFields, FacetRanges facetRanges) {
+		this.facetField = facetField;
 		this.facetFields = facetFields;
-		this.facet_fields = facet_fields;
 		this.facetRanges = facetRanges;
 	}
 
@@ -20,7 +20,7 @@ public class Facets{
 	}
 
 	public FacetFields getFacetFields(){
-		return facet_fields;
+		return facetFields;
 	}
 
 	public FacetRanges getFacetRanges() {

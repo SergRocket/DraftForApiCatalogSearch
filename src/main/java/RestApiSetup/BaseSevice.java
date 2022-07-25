@@ -52,7 +52,7 @@ public class BaseSevice extends ReportInitialization {
     }
 
     public static String getBaseUrlRegFeatureFlag(String env) {
-        String url = "https://product-feed."+env+".shutterfly.com";
+        String url = "https://configserver-cloud."+env+".shutterfly.com";
 
         return url;
     }
@@ -78,7 +78,7 @@ public class BaseSevice extends ReportInitialization {
     }
 
     protected String getBasePathRegFeatureFlag() {
-        return "/debug/";
+        return "/1.0.0-20220715-1332-bc1af4e/services_product_feed-stage.properties";
     }
 
     protected String getBasePathRegFeatureFlagOnOff() {

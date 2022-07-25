@@ -320,8 +320,6 @@ public class PipData extends RestSpecRegression {
             filteredHashList.add(DatatypeConverter.printHexBinary(
                     MessageDigest.getInstance("MD5").digest(s.getBytes("UTF-8"))).toLowerCase());
         }
-        System.out.println(filteredHashList);
-        System.out.println(keyListForHasing);
         return filteredHashList;
     }
 
