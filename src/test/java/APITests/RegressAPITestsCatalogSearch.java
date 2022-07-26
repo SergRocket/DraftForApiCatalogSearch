@@ -275,7 +275,7 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
             .getFacets().getFacetRanges().getSalePrices().get(1).getCount());
     }
 
-    @Test(description = "MAPI API2 search stage test with filter for sale_prices and validate facets are present and facetsRanges")
+    @Test(description = "MAPI API2 search stage test with filter for sale_prices and validate facets")
     public void verifyMAPIApi2ResponseBodyFacetsBetaWithSalePriceFilter() {
         Map<String, String> mainParameters = new HashMap<>();
         mainParameters.put("url", "https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
@@ -283,10 +283,21 @@ public class RegressAPITestsCatalogSearch extends BaseSevice {
         mainParameters.put("sid", "_br_uid_2");
         mainParameters.put("fl", "price,sale_price,title");
         mainParameters.put("q", "mug");
-        Assert.assertFalse(mapiData.getMapiData(mainParameters, "sale_price:[10 TO 19.99]").getFacets().getFacetRanges().getPrice().isEmpty());
-        Assert.assertFalse(mapiData.getMapiData(mainParameters, "sale_price:[10 TO 19.99]").getFacets().getFacetRanges().getSalePrices().isEmpty());
         Assert.assertFalse(mapiData.getMapiData(mainParameters, "sale_price:[10 TO 19.99]").getFacets().getFacetFields().getCategory().isEmpty());
         Assert.assertFalse(mapiData.getMapiData(mainParameters, "sale_price:[10 TO 19.99]").getFacets().getFacetFields().toString().isEmpty());
+    }
+
+    @Test(description = "MAPI API2 search stage test with filter for sale_prices and validate facetsRanges")
+    public void verifyMAPIApi2ResponseBodyFacetsRangesBetaWithSalePriceFilter() {
+        Map<String, String> mainParameters = new HashMap<>();
+        mainParameters.put("url", "https://www.shutterfly.com/sitesearch/enjoy+cotton+tote");
+        mainParameters.put("refurl", "https://shutterfly.com%");
+        mainParameters.put("sid", "_br_uid_2");
+        mainParameters.put("fl", "price,sale_price,title");
+        mainParameters.put("q", "mug");
+        Assert.assertFalse(mapiData.getMapiData(mainParameters, "sale_price:[9 TO 9.99]").getFacets().getFacetRanges().getPrice().isEmpty());
+        Assert.assertFalse(mapiData.getMapiData(mainParameters, "sale_price:[9 TO 9.99]").getFacets().getFacetRanges().getSalePrices().isEmpty());
+        Assert.assertFalse(mapiData.getMapiData(mainParameters, "sale_price:[9 TO 9.99]").getFacets().getFacetRanges().toString().isEmpty());
     }
 
     @Test(description = "Verify suggestion is in the response with muge query")
